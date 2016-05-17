@@ -6,6 +6,13 @@ function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
 % thinf, 17.05.2016 add ploting for infoboard, input needs to conatin:
 
 if 0
+   path = '/home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/300234061032780_'
+   stn = 'fse2'
+   workpath = '/home/csys/thatterm/fis_nrt' 
+   savepath = '/home/csys/thatterm/fis_nrt/'
+end
+
+if 0
 path = 'C:\Dropbox\Osci\FISP\#DATA\SBD/300234061032780_' % path and
 % prefix of messages
 stn = 'fse2' % name of station, on ly used for saving prefix (I hope)
@@ -120,7 +127,7 @@ end
     end
     
     DayNo = 1;
-    
+    %keyboard
     %Loop through messages and process data.
     
     while MessageNo < (MaxNumberOfDays * NumberOfDailyMessages) && DayNo <= MaxNumberOfDays;
@@ -458,6 +465,7 @@ ad.cv = cv;
 
     %######## END OF DATASAVING SECTION, make standard plots ###############
 
+
 %%
 figure(1); set(gcf,'position',[100 10 1200 800]); clf
 numu = [datenum(2016,01,06):1:round(now)-1];
@@ -475,7 +483,10 @@ for i = ni
     pu(i) = median(mc.p{ii});
 end
 sp1 = subplot(4,1,1:2);
-contourf(numu,pu,tu',24); shading flat;
+contourf(numu,pu,tu',24,'color','none'); shading flat;
+hold on
+plot(numu(1),pu,'k>','linewidth',2,'markersize',10)
+plot(numu(end),pu,'k<','linewidth',2,'markersize',10)
 set(gca,'ydir','rev','xaxislocation','top','fontsize',16)
 ylabel('Pressure [dBar]')
 %title('Time')
@@ -489,7 +500,7 @@ datetick('x','keeplimits')
 sp2=subplot(4,1,3:4);
 sp1pos =  get(sp1,'position');
 sp2pos =  get(sp2,'position');
-sp2pos(3) = sp1pos(3);
+sp2pos(3) = sp1pos(3)*0.925;
 
 %
  adp =[6 5 2 1];
