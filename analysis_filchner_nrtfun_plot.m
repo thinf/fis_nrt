@@ -3,7 +3,30 @@ function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
 % still heavily under construction
 % thinf, 04.02.2015, tore.hattermann@awi.de
 % thinf, 14.04.2016. extended to run as standalone
+% thinf, 17.05.2016 add ploting for infoboard, input needs to conatin:
 
+if 0
+path = 'C:\Dropbox\Osci\FISP\#DATA\SBD/300234061032780_' % path and
+% prefix of messages
+stn = 'fse2' % name of station, on ly used for saving prefix (I hope)
+workpath = 'C:\THINF\#TEMP\fis_nrt_tmp' % Non-dropbox synched working
+% directory that also conatins the dummy messages
+savepath = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\infoboard/'
+% path for saving output
+end
+
+
+if 0
+path = 'C:\Dropbox\Osci\FISP\#DATA\SBD/300234061031800_' % path and
+% prefix of messages
+stn = 'fsw1' % name of station, on ly used for saving prefix (I hope)
+workpath = 'C:\THINF\#TEMP\fis_nrt_tmp' % Non-dropbox synched working
+% directory that also conatins the dummy messages
+savepath = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\infoboard/'
+% path for saving output
+end
+
+%
 % Janik:
 % hier die beiden Pf�de:
 %  
@@ -167,8 +190,8 @@ function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
             
             if isempty(MessageArray{j, 3, DayNo})
                 %MessageArray{j, 2, DayNo} = strcat('C:\Users\THOSTR\Documents\documents from field season 2015-16\inductive system\FSW1\Iridium Analysis\blankmsg', sprintf('%d', j), '.sbd');
-               % MessageArray{j, 2, DayNo} = strcat(workpath, 'blankmsg', sprintf('%d', j), '.sbd');
-                MessageArray{j, 2, DayNo} = strcat('./', 'blankmsg', sprintf('%d', j), '.sbd');
+                MessageArray{j, 2, DayNo} = strcat(workpath, '/blankmsg', sprintf('%d', j), '.sbd');
+              %  MessageArray{j, 2, DayNo} = strcat('./', 'blankmsg', sprintf('%d', j), '.sbd');
                 MessageArray{j, 3, DayNo} = fopen(MessageArray{j, 2, DayNo}, 'r');
                 
             else
@@ -226,6 +249,7 @@ function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
             = dailySBD_filchner(nMC, nAD, fids, workpath, add_dummybytes);
         
         %% write out data of the day
+        if 0
         if isfinite(data(DayNo).Housekeeping.Date)
            % dfile = [paths{ipi} stns{ipi} '_' datestr(datenum(data(DayNo).Housekeeping.Date),'yyyy-mm-dd')];
             dfile = [savepath stn '_' datestr(datenum(data(DayNo).Housekeeping.Date),'yyyy-mm-dd')];
@@ -304,1154 +328,208 @@ function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
                 dlmwrite(file,dmat,'delimiter',';','precision',9,'-append')
             end   
         end
-        
+        end % if 0 writ out data of the day
         %%
         DayNo = DayNo + 1;
     end
 % end % run over paths for script only
- %% stack Microcat data
 
-    clear num p t c s th
-
-   
-
+  %% stack Microcat data
+%  addpath('./nrt_toolbox')
+    clear num p t c s th mc
+    
     for n = 1:numel(data(1).Microcats)
-
         num{n} = [];
-
         p{n} = [];
-
         t{n} = [];
-
         c{n} = [];
-
-       
-
+        
         for i = 1:numel(data)
-
-            hold on
-
+           
             num_ = cell2mat(data(i).Microcats(n).Timestamp);
-
-           
-
-            p_ = data(i).Microcats(n).Pressure;
-
-            t_ = data(i).Microcats(n).Temperature;
-
-            c_ = data(i).Microcats(n).Conductivity;
-
-           
-
-            %abs(datenum(2016,1,1)-num)<500
-
-           ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & p_ > 0 & p_ < 10000);
-
-           
-
-            num{n}=[num{n}; num_(ii)];
-
-            p{n}=[p{n}; p_(ii)];
-
-            t{n}=[t{n}; t_(ii)];
-
-            c{n}=[c{n}; c_(ii)];
-
             
-
-            if NumberOfDailyMessages==5
-
-                num{n}(num{n}>datenum(2016,1,21))=datenum(2016,1,21);
-
-            end
-
-        end
-
-       
-
-        
-
-        %make dum p t th c s
-
-        %mc{n} = dum;
-
-    end
-
-    cell2col(num,p,t,c)
-
-    col2mat(num,p,t,c)
-
-    s = sw_salt(10*c/sw_c3515,t,p);
-
-    th = sw_ptmp(s,t,p,0);
-
-   
-
-    make mc num p t th c s
-
-   
-
-    %% stack Aquadopp data
-
-    clear num p t cv w head pitch roll amp1 amp2 amp3
-
-   
-
-    for n = 1:numel(data(1).Aquadopps)
-
-        num{n} = [];
-
-        p{n} = [];
-
-        t{n} = [];
-
-        cv{n} = [];
-
-        w{n} = [];
-
-        head{n} = [];
-
-        pitch{n} = [];
-
-        roll{n} = [];
-
-        amp1{n} = [];
-
-        amp2{n} = [];
-
-        amp3{n} = [];
-
-       
-
-        for i = 1:numel(data)
-
-            hold on
-
-            %             for j = 1:numel(data(i).Aquadopps(n).Timestamp)
-
-            %                 if isempty(data(i).Aquadopps(n).Timestamp{j})
-
-            %                     data(i).Aquadopps(n).Timestamp{j} = nan;
-
-            %                 end
-
-            %             end
-
-            if isempty( data(i).Aquadopps(n).Timestamp{1})
-
-                data(i).Aquadopps(n).Timestamp{1} =nan;
-
-            end
-
-            num_ = data(i).Aquadopps(n).Timestamp{1}+[0:2:22]'/24; %cell2mat(data(i).Aquadopps(n).Timestamp);
-
-           
-
-            p_ = data(i).Aquadopps(n).P;
-
-            t_ = data(i).Aquadopps(n).T;
-
-            cv_ = data(i).Aquadopps(n).U + 1i*data(i).Aquadopps(n).V;
-
-            w_ = data(i).Aquadopps(n).W;
-
-            head_ = data(i).Aquadopps(n).Head;
-
-            pitch_ = data(i).Aquadopps(n).Pitch;
-
-            roll_ = data(i).Aquadopps(n).Roll;
-
-            amp1_ = data(i).Aquadopps(n).Amp1;
-
-            amp2_ = data(i).Aquadopps(n).Amp2;
-
-            amp3_ = data(i).Aquadopps(n).Amp3;
-
-           
-
+            p_ = data(i).Microcats(n).Pressure;
+            t_ = data(i).Microcats(n).Temperature;
+            c_ = data(i).Microcats(n).Conductivity;
+            
             %abs(datenum(2016,1,1)-num)<500
-
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & abs(cv_)<1);
-
-           
-
+            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & p_ > 0 & p_ < 10000);
+            
             num{n}=[num{n}; num_(ii)];
-
             p{n}=[p{n}; p_(ii)];
-
             t{n}=[t{n}; t_(ii)];
-
-            cv{n}=[cv{n}; cv_(ii)];
-
-            w{n}=[w{n}; w_(ii)];
-
-            head{n}=[head{n}; head_(ii)];
-
-            pitch{n}=[pitch{n}; pitch_(ii)];
-
-            roll{n}=[roll{n}; roll_(ii)];
-
-            amp1{n}=[amp1{n}; amp1_(ii)];
-
-            amp2{n}=[amp2{n}; amp2_(ii)];
-
-            amp3{n}=[amp3{n}; amp3_(ii)];
-
-           
-
+            c{n}=[c{n}; c_(ii)];
+            
             if NumberOfDailyMessages==5
-
                 num{n}(num{n}>datenum(2016,1,21))=datenum(2016,1,21);
-
             end
-
         end
-
-       
-
         
-
+        
         %make dum p t th c s
-
         %mc{n} = dum;
-
     end
+    %%
+%     cell2col(num,p,t,c)
+%     col2mat(num,p,t,c)
+%     s = sw_salt(10*c/sw_c3515,t,p);
+%     th = sw_ptmp(s,t,p,0);
+%     
+%     make mc num p t th c s
 
-    cell2col(num,p,t,cv,w,head,pitch,roll,amp1,amp2,amp3)
-
-    col2mat(num, p,t,cv,w,head,pitch,roll,amp1,amp2,amp3)
-
-   
-
-    make ad num p t cv w head pitch roll amp1 amp2 amp3
-
-    timestamp = now;
-
-    make dum mc ad timestamp files path
-
-    eval([stn '= dum;'])
-
-    save([outpath stn '_' datestr(now,'yyyy_mm')],stn)
+mc.num = num;
+mc.t = t;
+mc.c = c;
+mc.p = p;
+    %% stack Aquadopp data
+    clear num p t cv w head pitch roll amp1 amp2 amp3 ad
+    
+    for n = 1:numel(data(1).Aquadopps)
+        num{n} = [];
+        p{n} = [];
+        t{n} = [];
+        cv{n} = [];
+        w{n} = [];
+        head{n} = [];
+        pitch{n} = [];
+        roll{n} = [];
+        amp1{n} = [];
+        amp2{n} = [];
+        amp3{n} = [];
+        
+        for i = 1:numel(data)
+            hold on
+            %             for j = 1:numel(data(i).Aquadopps(n).Timestamp)
+            %                 if isempty(data(i).Aquadopps(n).Timestamp{j})
+            %                     data(i).Aquadopps(n).Timestamp{j} = nan;
+            %                 end
+            %             end
+            if isempty( data(i).Aquadopps(n).Timestamp{1})
+                data(i).Aquadopps(n).Timestamp{1} =nan;
+            end
+            num_ = data(i).Aquadopps(n).Timestamp{1}+[0:2:22]'/24; %cell2mat(data(i).Aquadopps(n).Timestamp);
+            
+            p_ = data(i).Aquadopps(n).P;
+            t_ = data(i).Aquadopps(n).T;
+            cv_ = data(i).Aquadopps(n).U + 1i*data(i).Aquadopps(n).V;
+            w_ = data(i).Aquadopps(n).W;
+            head_ = data(i).Aquadopps(n).Head;
+            pitch_ = data(i).Aquadopps(n).Pitch;
+            roll_ = data(i).Aquadopps(n).Roll;
+            amp1_ = data(i).Aquadopps(n).Amp1;
+            amp2_ = data(i).Aquadopps(n).Amp2;
+            amp3_ = data(i).Aquadopps(n).Amp3;
+            
+            %abs(datenum(2016,1,1)-num)<500
+            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & abs(cv_)<1);
+            
+            num{n}=[num{n}; num_(ii)];
+            p{n}=[p{n}; p_(ii)];
+            t{n}=[t{n}; t_(ii)];
+            cv{n}=[cv{n}; cv_(ii)];
+            w{n}=[w{n}; w_(ii)];
+            head{n}=[head{n}; head_(ii)];
+            pitch{n}=[pitch{n}; pitch_(ii)];
+            roll{n}=[roll{n}; roll_(ii)];
+            amp1{n}=[amp1{n}; amp1_(ii)];
+            amp2{n}=[amp2{n}; amp2_(ii)];
+            amp3{n}=[amp3{n}; amp3_(ii)];
+            
+            if NumberOfDailyMessages==5
+                num{n}(num{n}>datenum(2016,1,21))=datenum(2016,1,21);
+            end
+        end
+        
+        
+        %make dum p t th c s
+        %mc{n} = dum;
+    end
+    %%
+%     cell2col(num,p,t,cv,w,head,pitch,roll,amp1,amp2,amp3)
+%     col2mat(num, p,t,cv,w,head,pitch,roll,amp1,amp2,amp3)
+%     
+%     make ad num p t cv w head pitch roll amp1 amp2 amp3
+%     timestamp = now;
+%     make dum mc ad timestamp files path
+%     eval([stn '= dum;'])
+%     save([outpath stn '_' datestr(now,'yyyy_mm')],stn)
+ad.num = num;
+ad.cv = cv;
 
     %######## END OF DATASAVING SECTION, make standard plots ###############
 
- 
+%%
+figure(1); set(gcf,'position',[100 10 1200 800]); clf
+numu = [datenum(2016,01,06):1:round(now)-1];
+clear tu pu
 
-%% plot Microcats
-
-figure(1); clf
-
-cmap = jet(6);
-
-for d = 1:3
-
-    subplot(3,1,d)
-
-   
-
-    for n = 1:6
-
-        X = [];
-
-        Y = [];
-
-        for i = 1:numel(data)
-
-            hold on
-
-            x = cell2mat(data(i).Microcats(n).Timestamp);
-
-            switch d
-
-                case 1
-
-                   
-
-                    y = data(i).Microcats(n).Pressure;
-
-                    ywin = [700 1200];
-
-                    tit = 'Pressure (dBar)';
-
-                    set(gca,'ydir','rev')
-
-                case 2
-
-                    %x = data(i).Microcats(n).Timestamp{:};
-
-                    y = data(i).Microcats(n).Temperature;
-
-                    ywin = [-2.5 -2.2];
-
-                    tit = 'Temperature (degC)';
-
-                case 3
-
-                    %x = data(i).Microcats(n).Timestamp{:};
-
-                    y = data(i).Microcats(n).Conductivity;
-
-                    ywin = [2.68 2.75];
-
-                    tit = 'Conductivity (mS/cm)';
-
-            end
-
-            abs(datenum(2016,1,1)-x)<200
-
-            ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<300 & isfinite(y));
-
-            X=[X; x(ii)];
-
-            Y=[Y; y(ii)];
-
-           
-
-        end
-
-        if NumberOfDailyMessages==5
-
-            X(X>datenum(2016,1,21))=datenum(2016,1,21);
-
-        end
-
-        ii = find(abs(Y-median(Y))<4*std(Y));
-
-        plot(X(ii),Y(ii),'-','color',cmap(n,:),'linewidth',2)
-
-        % tit = 'Pressure (dBar)';
-
-       
-
-        %     title(['AD ' num2str(n) ', color = time (days)'])
-
-        %     xlabel(['U (cm/s)'])
-
-        %     ylabel(['V (cm/s)'])
-
-        %     pause(1)
-
-        %     xlim([-0.5 0.5])
-
-        ylim(ywin)
-
-        datetick('x')
-
-        %xlim([datenum(2016,1,5), max(X)])
-
-        xlim([min(X(isfinite(X))), min(now,max(X(isfinite(X))))])
-
-        %     grid on
-
-        box on
-
-        xlabel('Date')
-
-        ylabel(tit)
-
-    end
-
+if strcmp(stn(1:4),'fsw1')
+    ni = 1:numel(mc.num)-1;
+else
+    ni = 1:numel(mc.num);
 end
 
-thscr2png(['Microcat_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
+for i = ni
+    ii = i + numel(mc.num)-numel(ni);
+    tu(:,i) = interp1(mc.num{ii},vfilt(mc.t{ii},12),numu);
+    pu(i) = median(mc.p{ii});
+end
+sp1 = subplot(4,1,1:2);
+contourf(numu,pu,tu',24); shading flat;
+set(gca,'ydir','rev','xaxislocation','top','fontsize',16)
+ylabel('Pressure [dBar]')
+%title('Time')
+datetick('x','keeplimits')
+ cb = colorbar;
+ set(cb,'fontsize',16)
+ ylabel(cb,'Temperature [^oC]')
 
-%% plot Microcats TS
 
-figure(10); clf
 
-clear D
+sp2=subplot(4,1,3:4);
+sp1pos =  get(sp1,'position');
+sp2pos =  get(sp2,'position');
+sp2pos(3) = sp1pos(3);
 
-cmap = jet(6);
+%
+ adp =[6 5 2 1];
+ clear adpu
+ for i = 1:numel(ad.num)
+    adpu{i} = [num2str(round(median(mc.p{adp(i)}))) ' dBar'];
+end
 
- 
-
-for n = 1:6
-
-    X = [];
-
-    P = [];
-
-    T = [];
-
-    C = [];
-
-    for i = 1:numel(data)
-
-        hold on
-
-        x = cell2mat(data(i).Microcats(n).Timestamp);
-
-       
-
-        p = data(i).Microcats(n).Pressure;
-
-        t = data(i).Microcats(n).Temperature;
-
-        c = data(i).Microcats(n).Conductivity;
-
-       
-
-        abs(datenum(2016,1,1)-x)<500
-
-        ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<500 & p > 0 & p < 10000);
-
-        X=[X; x(ii)];
-
-        P=[P; p(ii)];
-
-        T=[T; t(ii)];
-
-        C=[C; c(ii)];
-
-       
-
-        if NumberOfDailyMessages==5
-
-            X(X>datenum(2016,1,21))=datenum(2016,1,21);
-
-        end
-
-    end
-
-   
-
-    S = sw_salt(10*C/sw_c3515,T,P);
-
-    TH = sw_ptmp(S,T,P,0);
-
-   
-
-    %plot(X,S,'-','color',cmap(n,:),'linewidth',2)
-
-    %datetick('x')
-
-    %xlim([min(X), max(X)])
-
-   
-
-    % tit = 'Pressure (dBar)';
-
-   
-
-    %     title(['AD ' num2str(n) ', color = time (days)'])
-
-    %     xlabel(['U (cm/s)'])
-
-    %     ylabel(['V (cm/s)'])
-
-    %     pause(1)
-
-    %     xlim([-0.5 0.5])
-
-    %ylim(ywin)
-
-    %xlim([datenum(2016,1,5), max(X)])
-
-    %     grid on
-
-   
-
-    pl(n) = plot(S,TH,'.','color',cmap(n,:));
-
-    sref = 34.4:0.05:34.65;
-
-    D{n} = num2str(round(median(P)));
-
-    plot(sref,fp_t(sref,ones(size(sref))*median(P)),'-','linewidth',2,'color',0.7*[1 1 1])
-
-    plot(sref,thgade(sref,34.49,-2.45,'temp'),'-b')
-
-    plot(sref,thgade(sref,34.51,-2.5,'temp'),'-r')
-
-    box on
-
-    %xlabel('Date')
-
-    %ylabel(tit)
-
-   
-
+    p1 = plot(ad.num{1},abs(ad.cv{1})*100,'.',...
+        ad.num{2},abs(ad.cv{2})*100,'.',...
+        ad.num{3},abs(ad.cv{3})*100,'.',...
+        ad.num{4},abs(ad.cv{4})*100,'.');
     
-
-end
-
-xlim([34.4671, 34.6328]);
-
-ylim([-2.5146,-2.2248]);
-
-denscont(0)
-
-xlabel('Salinity')
-
-ylabel('Potential temperature')
-
-legend(pl,D,'location','northwest')
-
-title(stn)
-
-thscr2png(['TS_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
-
-%% plot Aquadopps
-
-figure(2); clf
-
-cmap = jet(numel(data));
-
-for n = 1:4
- %% stack Microcat data
-
-    clear num p t c s th
-
-   
-
-    for n = 1:numel(data(1).Microcats)
-
-        num{n} = [];
-
-        p{n} = [];
-
-        t{n} = [];
-
-        c{n} = [];
-
-       
-
-        for i = 1:numel(data)
-
-            hold on
-
-            num_ = cell2mat(data(i).Microcats(n).Timestamp);
-
-           
-
-            p_ = data(i).Microcats(n).Pressure;
-
-            t_ = data(i).Microcats(n).Temperature;
-
-            c_ = data(i).Microcats(n).Conductivity;
-
-           
-
-            %abs(datenum(2016,1,1)-num)<500
-
-           ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & p_ > 0 & p_ < 10000);
-
-           
-
-            num{n}=[num{n}; num_(ii)];
-
-            p{n}=[p{n}; p_(ii)];
-
-            t{n}=[t{n}; t_(ii)];
-
-            c{n}=[c{n}; c_(ii)];
-
-            
-
-            if NumberOfDailyMessages==5
-
-                num{n}(num{n}>datenum(2016,1,21))=datenum(2016,1,21);
-
-            end
-
-        end
-
-       
-
-        
-
-        %make dum p t th c s
-
-        %mc{n} = dum;
-
-    end
-
-    cell2col(num,p,t,c)
-
-    col2mat(num,p,t,c)
-
-    s = sw_salt(10*c/sw_c3515,t,p);
-
-    th = sw_ptmp(s,t,p,0);
-
-   
-
-    make mc num p t th c s
-
-   
-
-    %% stack Aquadopp data
-
-    clear num p t cv w head pitch roll amp1 amp2 amp3
-
-   
-
-    for n = 1:numel(data(1).Aquadopps)
-
-        num{n} = [];
-
-        p{n} = [];
-
-        t{n} = [];
-
-        cv{n} = [];
-
-        w{n} = [];
-
-        head{n} = [];
-
-        pitch{n} = [];
-
-        roll{n} = [];
-
-        amp1{n} = [];
-
-        amp2{n} = [];
-
-        amp3{n} = [];
-
-       
-
-        for i = 1:numel(data)
-
-            hold on
-
-            %             for j = 1:numel(data(i).Aquadopps(n).Timestamp)
-
-            %                 if isempty(data(i).Aquadopps(n).Timestamp{j})
-
-            %                     data(i).Aquadopps(n).Timestamp{j} = nan;
-
-            %                 end
-
-            %             end
-
-            if isempty( data(i).Aquadopps(n).Timestamp{1})
-
-                data(i).Aquadopps(n).Timestamp{1} =nan;
-
-            end
-
-            num_ = data(i).Aquadopps(n).Timestamp{1}+[0:2:22]'/24; %cell2mat(data(i).Aquadopps(n).Timestamp);
-
-           
-
-            p_ = data(i).Aquadopps(n).P;
-
-            t_ = data(i).Aquadopps(n).T;
-
-            cv_ = data(i).Aquadopps(n).U + 1i*data(i).Aquadopps(n).V;
-
-            w_ = data(i).Aquadopps(n).W;
-
-            head_ = data(i).Aquadopps(n).Head;
-
-            pitch_ = data(i).Aquadopps(n).Pitch;
-
-            roll_ = data(i).Aquadopps(n).Roll;
-
-            amp1_ = data(i).Aquadopps(n).Amp1;
-
-            amp2_ = data(i).Aquadopps(n).Amp2;
-
-            amp3_ = data(i).Aquadopps(n).Amp3;
-
-           
-
-            %abs(datenum(2016,1,1)-num)<500
-
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & abs(cv_)<1);
-
-           
-
-            num{n}=[num{n}; num_(ii)];
-
-            p{n}=[p{n}; p_(ii)];
-
-            t{n}=[t{n}; t_(ii)];
-
-            cv{n}=[cv{n}; cv_(ii)];
-
-            w{n}=[w{n}; w_(ii)];
-
-            head{n}=[head{n}; head_(ii)];
-
-            pitch{n}=[pitch{n}; pitch_(ii)];
-
-            roll{n}=[roll{n}; roll_(ii)];
-
-            amp1{n}=[amp1{n}; amp1_(ii)];
-
-            amp2{n}=[amp2{n}; amp2_(ii)];
-
-            amp3{n}=[amp3{n}; amp3_(ii)];
-
-           
-
-            if NumberOfDailyMessages==5
-
-                num{n}(num{n}>datenum(2016,1,21))=datenum(2016,1,21);
-
-            end
-
-        end
-
-       
-
-        
-
-        %make dum p t th c s
-
-        %mc{n} = dum;
-
-    end
-
-    cell2col(num,p,t,cv,w,head,pitch,roll,amp1,amp2,amp3)
-
-    col2mat(num, p,t,cv,w,head,pitch,roll,amp1,amp2,amp3)
-
-   
-
-    make ad num p t cv w head pitch roll amp1 amp2 amp3
-
-    timestamp = now;
-
-    make dum mc ad timestamp files path
-
-    eval([stn '= dum;'])
-
-    save([outpath stn '_' datestr(now,'yyyy_mm')],stn)
-
-    %######## END OF DATASAVING SECTION, make standard plots ###############
-
- 
-
-%% plot Microcats
-
-figure(1); clf
-
-cmap = jet(6);
-
-for d = 1:3
-
-    subplot(3,1,d)
-
-   
-
-    for n = 1:6
-
-        X = [];
-
-        Y = [];
-
-        for i = 1:numel(data)
-
-            hold on
-
-            x = cell2mat(data(i).Microcats(n).Timestamp);
-
-            switch d
-
-                case 1
-
-                   
-
-                    y = data(i).Microcats(n).Pressure;
-
-                    ywin = [700 1200];
-
-                    tit = 'Pressure (dBar)';
-
-                    set(gca,'ydir','rev')
-
-                case 2
-
-                    %x = data(i).Microcats(n).Timestamp{:};
-
-                    y = data(i).Microcats(n).Temperature;
-
-                    ywin = [-2.5 -2.2];
-
-                    tit = 'Temperature (degC)';
-
-                case 3
-
-                    %x = data(i).Microcats(n).Timestamp{:};
-
-                    y = data(i).Microcats(n).Conductivity;
-
-                    ywin = [2.68 2.75];
-
-                    tit = 'Conductivity (mS/cm)';
-
-            end
-
-            abs(datenum(2016,1,1)-x)<200
-
-            ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<300 & isfinite(y));
-
-            X=[X; x(ii)];
-
-            Y=[Y; y(ii)];
-
-           
-
-        end
-
-        if NumberOfDailyMessages==5
-
-            X(X>datenum(2016,1,21))=datenum(2016,1,21);
-
-        end
-
-        ii = find(abs(Y-median(Y))<4*std(Y));
-
-        plot(X(ii),Y(ii),'-','color',cmap(n,:),'linewidth',2)
-
-        % tit = 'Pressure (dBar)';
-
-       
-
-        %     title(['AD ' num2str(n) ', color = time (days)'])
-
-        %     xlabel(['U (cm/s)'])
-
-        %     ylabel(['V (cm/s)'])
-
-        %     pause(1)
-
-        %     xlim([-0.5 0.5])
-
-        ylim(ywin)
-
-        datetick('x')
-
-        %xlim([datenum(2016,1,5), max(X)])
-
-        xlim([min(X(isfinite(X))), min(now,max(X(isfinite(X))))])
-
-        %     grid on
-
-        box on
-
-        xlabel('Date')
-
-        ylabel(tit)
-
-    end
-
-end
-
-thscr2png(['Microcat_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
-
-%% plot Microcats TS
-
-figure(10); clf
-
-clear D
-
-cmap = jet(6);
-
- 
-
-for n = 1:6
-
-    X = [];
-
-    P = [];
-
-    T = [];
-
-    C = [];
-
-    for i = 1:numel(data)
-
-        hold on
-
-        x = cell2mat(data(i).Microcats(n).Timestamp);
-
-       
-
-        p = data(i).Microcats(n).Pressure;
-
-        t = data(i).Microcats(n).Temperature;
-
-        c = data(i).Microcats(n).Conductivity;
-
-       
-
-        abs(datenum(2016,1,1)-x)<500
-
-        ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<500 & p > 0 & p < 10000);
-
-        X=[X; x(ii)];
-
-        P=[P; p(ii)];
-
-        T=[T; t(ii)];
-
-        C=[C; c(ii)];
-
-       
-
-        if NumberOfDailyMessages==5
-
-            X(X>datenum(2016,1,21))=datenum(2016,1,21);
-
-        end
-
-    end
-
-   
-
-    S = sw_salt(10*C/sw_c3515,T,P);
-
-    TH = sw_ptmp(S,T,P,0);
-
-   
-
-    %plot(X,S,'-','color',cmap(n,:),'linewidth',2)
-
-    %datetick('x')
-
-    %xlim([min(X), max(X)])
-
-   
-
-    % tit = 'Pressure (dBar)';
-
-   
-
-    %     title(['AD ' num2str(n) ', color = time (days)'])
-
-    %     xlabel(['U (cm/s)'])
-
-    %     ylabel(['V (cm/s)'])
-
-    %     pause(1)
-
-    %     xlim([-0.5 0.5])
-
-    %ylim(ywin)
-
-    %xlim([datenum(2016,1,5), max(X)])
-
-    %     grid on
-
-   
-
-    pl(n) = plot(S,TH,'.','color',cmap(n,:));
-
-    sref = 34.4:0.05:34.65;
-
-    D{n} = num2str(round(median(P)));
-
-    plot(sref,fp_t(sref,ones(size(sref))*median(P)),'-','linewidth',2,'color',0.7*[1 1 1])
-
-    plot(sref,thgade(sref,34.49,-2.45,'temp'),'-b')
-
-    plot(sref,thgade(sref,34.51,-2.5,'temp'),'-r')
-
-    box on
-
-    %xlabel('Date')
-
-    %ylabel(tit)
-
-   
-
-    
-
-end
-
-xlim([34.4671, 34.6328]);
-
-ylim([-2.5146,-2.2248]);
-
-denscont(0)
-
-xlabel('Salinity')
-
-ylabel('Potential temperature')
-
-legend(pl,D,'location','northwest')
-
-title(stn)
-
-thscr2png(['TS_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
-
-%% plot Aquadopps
-
-figure(2); clf
-
-cmap = jet(numel(data));
-
-for n = 1:4
-
-    subplot(2,2,n)
-
-    for i = 1:numel(data)
-
-        hold on
-
-        plot(data(i).Aquadopps(n).U,data(i).Aquadopps(n).V,'.','color',cmap(i,:))
-
-    end
-
-    colorbar
-
-    title(['AD ' num2str(n) ', color = time (days)'])
-
-    xlabel(['U (cm/s)'])
-
-    ylabel(['V (cm/s)'])
-
-    pause(1)
-
-    xlim([-0.5 0.5])
-
-    ylim([-0.5 0.5])
-
-    axis square
-
+    hold on
+    fl = 60;
+    p2 = plot(ad.num{1},vfilt(abs(ad.cv{1})*100,fl),...
+        ad.num{2},vfilt(abs(ad.cv{2})*100,fl),...
+        ad.num{3},vfilt(abs(ad.cv{3})*100,fl),...
+        ad.num{4},vfilt(abs(ad.cv{4})*100,fl),'linewidth',3);
+    set(gca,'ylim',[0 50])
+    ylabel('Speed [cm/s]','fontsize',16)
+    set(sp2,'xlim',get(sp1,'xlim'),'fontsize',16)
     grid on
-
-    box on
-
-end
-
-thscr2png(['Aquadopp_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
-
-%% plot Aquadopps series
-
-figure(20); clf
-
-cmap = jet(numel(data));
-
-for n = 1:4
-
-    subplot(4,1,n)
-
-    for i = 1:numel(data)
-
-        hold on
-
-        if isempty( data(i).Aquadopps(n).Timestamp{1})
-
-            data(i).Aquadopps(n).Timestamp{1} =nan;
-
-        end
-
-       
-
-        plot(data(i).Aquadopps(n).Timestamp{1}+[0:2:22]/24,sqrt(data(i).Aquadopps(n).U.^2+data(i).Aquadopps(n).V.^2),'.','color',cmap(i,:))
-
-    end
-
-    %     colorbar
-
-    %     title(['AD ' num2str(n) ', color = time (days)'])
-
-    %     xlabel(['U (cm/s)'])
-
-    %     ylabel(['V (cm/s)'])
-
-    %     pause(1)
-
-    %     xlim([-0.5 0.5])
-
-    %     ylim([-0.5 0.5])
-
-    %     axis square
-
-    %     grid on
-
-    %     box on
-
-end
-
-thscr2png(['Aquadopp_ser' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
-    subplot(2,2,n)
-
-    for i = 1:numel(data)
-
-        hold on
-
-        plot(data(i).Aquadopps(n).U,data(i).Aquadopps(n).V,'.','color',cmap(i,:))
-
-    end
-
-    colorbar
-
-    title(['AD ' num2str(n) ', color = time (days)'])
-
-    xlabel(['U (cm/s)'])
-
-    ylabel(['V (cm/s)'])
-
-    pause(1)
-
-    xlim([-0.5 0.5])
-
-    ylim([-0.5 0.5])
-
-    axis square
-
-    grid on
-
-    box on
-
-end
-
-thscr2png(['Aquadopp_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
-
-%% plot Aquadopps series
-
-figure(20); clf
-
-cmap = jet(numel(data));
-
-for n = 1:4
-
-    subplot(4,1,n)
-
-    for i = 1:numel(data)
-
-        hold on
-
-        if isempty( data(i).Aquadopps(n).Timestamp{1})
-
-            data(i).Aquadopps(n).Timestamp{1} =nan;
-
-        end
-
-       
-
-        plot(data(i).Aquadopps(n).Timestamp{1}+[0:2:22]/24,sqrt(data(i).Aquadopps(n).U.^2+data(i).Aquadopps(n).V.^2),'.','color',cmap(i,:))
-
-    end
-
-    %     colorbar
-
-    %     title(['AD ' num2str(n) ', color = time (days)'])
-
-    %     xlabel(['U (cm/s)'])
-
-    %     ylabel(['V (cm/s)'])
-
-    %     pause(1)
-
-    %     xlim([-0.5 0.5])
-
-    %     ylim([-0.5 0.5])
-
-    %     axis square
-
-    %     grid on
-
-    %     box on
-
-end
-
-thscr2png(['Aquadopp_ser' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
+    datetick('x','keeplimits')
+    lgd = legend(p2,adpu,'location','eastoutside');
+set(sp2,'position',sp2pos)
+
+%%
+oldscreenunits = get(gcf,'Units');
+oldpaperunits = get(gcf,'PaperUnits');
+oldpaperpos = get(gcf,'PaperPosition');
+set(gcf,'Units','pixels');
+scrpos = get(gcf,'Position');
+newpos = scrpos/100;
+set(gcf,'PaperUnits','inches',...
+'PaperPosition',newpos)
+
+print('-dpng', [savepath '/' stn '_timeseries'], '-r300');
+drawnow
+set(gcf,'Units',oldscreenunits,...
+'PaperUnits',oldpaperunits,...
+'PaperPosition',oldpaperpos)
 end
