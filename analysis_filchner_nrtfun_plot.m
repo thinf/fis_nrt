@@ -1,13 +1,22 @@
-function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
+% function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
 % First attemtp to read and plot the FISP Iridium data
 % still heavily under construction
 % thinf, 04.02.2015, tore.hattermann@awi.de
 % thinf, 14.04.2016. extended to run as standalone
 % thinf, 17.05.2016 add ploting for infoboard, input needs to conatin:
-
+disp('start iridium data analysis')
 if 0
-   path = '/home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/300234061032780_'
+   %path = '/home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/300234061032780_'
+   path = '/hs/datex/ingest/mooring/fse2/300234061032780_'
    stn = 'fse2'
+   workpath = '/home/csys/thatterm/fis_nrt' 
+   savepath = '/home/csys/thatterm/fis_nrt/'
+end
+
+if 1
+   %path = '/home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/300234061031800_'
+   path = '/hs/datex/ingest/mooring/fsw1/300234061031800_'
+   stn = 'fsw1'
    workpath = '/home/csys/thatterm/fis_nrt' 
    savepath = '/home/csys/thatterm/fis_nrt/'
 end
@@ -94,7 +103,7 @@ end
     % %365 days now, although this will mean the script takes a long time to
     % %run.
     % now determined automatically:
-    MaxNumberOfDays = round(now-datenum(2015,12,24));%100;
+    MaxNumberOfDays = round(now-datenum(2015,12,24))+30;%100;
     files = dir([path '*']);
     
     if NumberOfDailyMessages == 7;
@@ -110,7 +119,8 @@ end
     
     % set up output variable that will contain the actual data
     data = struct([]);
-    
+    broken_message = struct([]);
+    bm = 0;
     %% loop to find first valid file in directory.  This means that any files
     %that were sent by the modem and then deleted before deployment (eg test
     %messages etc) are ignored.
@@ -152,7 +162,18 @@ end
                 TempMsgNo = fread(FileIds{i}, 1, '*uint8', 2);
                 TempDate{i} = datestr(floor(double((fread(FileIds{i}, 1, '*uint32'))/24/3600 + datenum(1990,1,1,0,0,0))));
                 disp(TempDate{i})
-            else break
+            else
+                disp('broken message');
+               % i = i+1;
+               try
+                Filenames{i} =[];
+                FileIds{i} =[];
+                disp('missing message, skip and count further')
+                TempDate{i} = TempDate{i-1};
+               % error('stop here')
+               catch
+                break
+               end
             end
             
             %First time round loop stores filename and date in relevent cells in
@@ -178,6 +199,7 @@ end
             end
             
             if breakflag == true
+               
                 break
             end
             
@@ -211,8 +233,16 @@ end
                 position = ftell(MessageArray{j, 3, DayNo});
                 
                 if position ~= 337;
-                    
+                    bm = bm+1; %broken message counter
                     fclose(MessageArray{j, 3, DayNo});
+                    % copy file to read access location and fix by
+                    % appending mmissing bytes
+                    copyfile(MessageArray{j, 2, DayNo},workpath)
+                    dum = MessageArray{j, 2, DayNo};
+                    broken_message{bm} = [workpath,'/',dum(find(dum=='/',1,'last')+1:end)];
+                    
+                    MessageArray{j, 2, DayNo} = broken_message{end};
+                    
                     MessageArray{j, 3, DayNo} = fopen(MessageArray{j, 2, DayNo}, 'a+');
                     
                     noBytes = 337 - position;
@@ -255,92 +285,19 @@ end
         [data(DayNo).Housekeeping, data(DayNo).Microcats,data(DayNo).Aquadopps]...
             = dailySBD_filchner(nMC, nAD, fids, workpath, add_dummybytes);
         
-        %% write out data of the day
-        if 0
-        if isfinite(data(DayNo).Housekeeping.Date)
-           % dfile = [paths{ipi} stns{ipi} '_' datestr(datenum(data(DayNo).Housekeeping.Date),'yyyy-mm-dd')];
-            dfile = [savepath stn '_' datestr(datenum(data(DayNo).Housekeeping.Date),'yyyy-mm-dd')];
-            %%
-            if ~exist([dfile '.hdr'],'file')
-                diary([dfile '.hdr'])
-                disp(data(DayNo).Housekeeping)
-                diary off
-                
-                
-                %%  Write Microcat data
-                fields = {'Timestamp','Pressure','Temperature','Conductivity'};
-                units = {'JulianDays','dBar','degC','mS/cm'};
-                suffix = '_Microcats';
-                file = [dfile suffix '.txt'];
-                fid = fopen(file,'w+');
-                dmat = [];
-                for mcs = 1:nMC;
-                    % write header
-                    
-                    for iif = 1:numel(fields)
-                        fprintf(fid,'%s',['MC' num2str(mcs) ':' fields{iif} ':' units{iif} ';']);
-                    end
-                    dmat = [dmat, [data(DayNo).Microcats(mcs).Timestamp{:}]',...
-                        data(DayNo).Microcats(mcs).Pressure, ...
-                        data(DayNo).Microcats(mcs).Temperature, ...
-                        data(DayNo).Microcats(mcs).Conductivity*10,...
-                        ];
-                    
-                end
-                
-                fprintf(fid,'\n');
-                fclose(fid);
-                
-                dlmwrite(file,dmat,'delimiter',';','precision',9,'-append')
-                
-                %%  Write Aquadopp data
-                
-                
-                fields = {'Timestamp','U','V','W','Head','Pitch','Roll','Pressure','Temperature'};
-                units = {'JulianDays','m/s','m/s','m/s','deg','deg','deg','dBar','degC'};
-                suffix = '_Aquadopps';
-                file = [dfile suffix '.txt'];
-                fid = fopen(file,'w+');
-                dmat = [];
-                
-                for mcs = 1:nAD;
-                    % write header
-                    
-                    for iif = 1:numel(fields)
-                        fprintf(fid,'%s',['AD' num2str(mcs) ':' fields{iif} ':' units{iif} ';']);
-                    end
-                    
-                    adtime = [data(DayNo).Aquadopps(mcs).Timestamp{:}]';
-                    
-                    %if isempty( data(DayNo).Aquadopps(mcs).Timestamp{1})
-                    %   data(DayNo).Aquadopps(mcs).Timestamp =-9999;
-                    %end
-                    %num_ = data(i).Aquadopps(n).Timestamp{1}+[0:2:22]'/24; %cell2mat(data(i).Aquadopps(n).Timestamp);
-                    adtime(isnan(adtime))=-9999;
-                    
-                    dmat = [dmat, adtime,...
-                        data(DayNo).Aquadopps(mcs).U, ...
-                        data(DayNo).Aquadopps(mcs).V, ...
-                        data(DayNo).Aquadopps(mcs).W, ...
-                        data(DayNo).Aquadopps(mcs).Head, ...
-                        data(DayNo).Aquadopps(mcs).Pitch, ...
-                        data(DayNo).Aquadopps(mcs).Roll, ...
-                        data(DayNo).Aquadopps(mcs).P, ...
-                        data(DayNo).Aquadopps(mcs).T, ...
-                        ];
-                end
-                
-                fprintf(fid,'\n');
-                fclose(fid);
-                dlmwrite(file,dmat,'delimiter',';','precision',9,'-append')
-            end   
-        end
-        end % if 0 writ out data of the day
         %%
-        DayNo = DayNo + 1;
+        %if breakflag==false
+            DayNo = DayNo + 1;
+        %end
+    end
+    
+    if ~isempty(broken_message)
+    for i=2:numel(broken_message)
+        delete(broken_message{i})
+    end
     end
 % end % run over paths for script only
-
+%error('stop')
   %% stack Microcat data
 %  addpath('./nrt_toolbox')
     clear num p t c s th mc
@@ -479,8 +436,11 @@ end
 
 for i = ni
     ii = i + numel(mc.num)-numel(ni);
-    tu(:,i) = interp1(mc.num{ii},vfilt(mc.t{ii},12),numu);
-    pu(i) = median(mc.p{ii});
+    [c ia ic] = unique(mc.num{ii});
+    %tu(:,i) = interp1(mc.num{ii},vfilt(mc.t{ii},12),numu);
+    %pu(i) = median(mc.p{ii});
+    tu(:,i) = interp1(c,vfilt(mc.t{ii}(ia),12),numu);
+    pu(i) = median(mc.p{ii}(ia));
 end
 sp1 = subplot(4,1,1:2);
 contourf(numu,pu,tu',24,'color','none'); shading flat;
@@ -527,7 +487,7 @@ end
     datetick('x','keeplimits')
     lgd = legend(p2,adpu,'location','eastoutside');
 set(sp2,'position',sp2pos)
-
+error('stop')
 %%
 oldscreenunits = get(gcf,'Units');
 oldpaperunits = get(gcf,'PaperUnits');
@@ -544,4 +504,4 @@ set(gcf,'Units',oldscreenunits,...
 'PaperUnits',oldpaperunits,...
 'PaperPosition',oldpaperpos)
 exit
-end
+%end
