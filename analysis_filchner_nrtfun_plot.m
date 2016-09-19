@@ -1,4 +1,4 @@
-% function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
+function analysis_filchner_nrtfun_plot(path,stn,workpath,savepath)
 % First attemtp to read and plot the FISP Iridium data
 % still heavily under construction
 % thinf, 04.02.2015, tore.hattermann@awi.de
@@ -13,7 +13,7 @@ if 0
    savepath = '/home/csys/thatterm/fis_nrt/'
 end
 
-if 1
+if 0
    %path = '/home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/300234061031800_'
    path = '/hs/datex/ingest/mooring/fsw1/300234061031800_'
    stn = 'fsw1'
@@ -437,9 +437,9 @@ end
 for i = ni
     ii = i + numel(mc.num)-numel(ni);
     [c ia ic] = unique(mc.num{ii});
-    %tu(:,i) = interp1(mc.num{ii},vfilt(mc.t{ii},12),numu);
+    %tu(:,i) = interp1(mc.num{ii},vfilt_loc(mc.t{ii},12),numu);
     %pu(i) = median(mc.p{ii});
-    tu(:,i) = interp1(c,vfilt(mc.t{ii}(ia),12),numu);
+    tu(:,i) = interp1(c,vfilt_loc(mc.t{ii}(ia),12),numu);
     pu(i) = median(mc.p{ii}(ia));
 end
 sp1 = subplot(4,1,1:2);
@@ -476,10 +476,10 @@ end
     
     hold on
     fl = 60;
-    p2 = plot(ad.num{1},vfilt(abs(ad.cv{1})*100,fl),...
-        ad.num{2},vfilt(abs(ad.cv{2})*100,fl),...
-        ad.num{3},vfilt(abs(ad.cv{3})*100,fl),...
-        ad.num{4},vfilt(abs(ad.cv{4})*100,fl),'linewidth',3);
+    p2 = plot(ad.num{1},vfilt_loc(abs(ad.cv{1})*100,fl),...
+        ad.num{2},vfilt_loc(abs(ad.cv{2})*100,fl),...
+        ad.num{3},vfilt_loc(abs(ad.cv{3})*100,fl),...
+        ad.num{4},vfilt_loc(abs(ad.cv{4})*100,fl),'linewidth',3);
     set(gca,'ylim',[0 50])
     ylabel('Speed [cm/s]','fontsize',16)
     set(sp2,'xlim',get(sp1,'xlim'),'fontsize',16)
@@ -487,7 +487,7 @@ end
     datetick('x','keeplimits')
     lgd = legend(p2,adpu,'location','eastoutside');
 set(sp2,'position',sp2pos)
-error('stop')
+%error('stop')
 %%
 oldscreenunits = get(gcf,'Units');
 oldpaperunits = get(gcf,'PaperUnits');
@@ -504,4 +504,4 @@ set(gcf,'Units',oldscreenunits,...
 'PaperUnits',oldpaperunits,...
 'PaperPosition',oldpaperpos)
 exit
-%end
+end

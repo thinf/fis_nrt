@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="1996951048" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtfun_plot" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="4247379375" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtfun_plot" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>analysis_filchner_nrtfun_plot</param.appname>
     <param.icon />
     <param.icons />
@@ -97,7 +97,7 @@
       <file>${PROJECT_ROOT}/frac.m</file>
       <file>${PROJECT_ROOT}/iseven.m</file>
       <file>${PROJECT_ROOT}/to_overwrite.m</file>
-      <file>${PROJECT_ROOT}/vfilt.m</file>
+      <file>${PROJECT_ROOT}/vfilt_loc.m</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}/analysis_filchner_nrtfun_plot/for_testing" name="run_analysis_filchner_nrtfun_plot.sh" optional="false">/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_testing/run_analysis_filchner_nrtfun_plot.sh</file>
@@ -119,7 +119,7 @@
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>3.13.0-91-generic</osver>
+      <osver>3.13.0-93-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
