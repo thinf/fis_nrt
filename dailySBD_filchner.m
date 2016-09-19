@@ -1,5 +1,16 @@
 function [Housekeeping, Microcats, Aquadopps]...
-    = dailySBD_filchner(nMC, nAD, fids, workpath, add_dummybytes)
+    = dailySBD_filchner(nMC, nAD, fids, workpath, msg_type)
+
+% % add reference date for checking
+% if exist([workpath 'prevday'],'file')
+%     load([workpath 'prevday'], 'LoggerTimeNum')
+%     oldLoggerTimeNum = LoggerTimeNum;
+%     dtmax = 5;
+% else
+%     oldLoggerTimeNum = 0.5*datenum(2015,12,24)+now;
+%     dtmax = 0;
+% end
+dtmax = abs(datenum(2015,12,24)-now); % time stamp threshold
 
 %generate data structures for storing results
 Housekeeping = struct('Date', [], 'MsgNo', [], 'MsgTimestamps', [],...
@@ -92,7 +103,15 @@ else
     Housekeeping.Latitude = double(hex2dec(tmp))/10000;
 end
 
-Housekeeping.Longitude = double(fread(TempFileID, 1, '*int32'))/10000;
+Housekeeping.Longitude = fread(TempFileID, 1, '*int32');
+tmp = dec2hex(Housekeeping.Longitude);
+if length(tmp) > 5
+    Housekeeping.Longitude = double(hex2dec(tmp(1:5)))/10000;
+else
+    Housekeeping.Longitude = double(hex2dec(tmp))/10000;
+end
+%keyboard
+%Housekeeping.Longitude = double(fread(TempFileID, 1, '*int32'))/10000;
 
 Housekeeping.GPSTime = double(fread(TempFileID, 1, '*int32'));
 Housekeeping.VM2Time = double(fread(TempFileID, 1, '*int32'));
@@ -134,6 +153,7 @@ end
 
 %Cycle through remianing data to get data from the instruments.
 Repeat = (24*3600)/MeasurementInt;
+LoggerTimeNum = -9999;
 for j= 1:1:Repeat
     
     %**TO DO!  Chekc if we are in first 2hours of day and runsome
@@ -146,6 +166,7 @@ for j= 1:1:Repeat
     % function, which has been introduced after the date of Tore's
     % matlab license, thus he had to modify it to use the old datenum
     % format.
+    
     Time = double(fread(TempFileID, 1, '*int32'));
     
     % thinf: use datenum/ datevec instead
@@ -154,8 +175,17 @@ for j= 1:1:Repeat
     % Month = month(LoggerTimeStamp);
     % Day = day(LoggerTimeStamp);
     
+    oldLoggerTimeNum = LoggerTimeNum;
     LoggerTimeNum = (Time)/24/3600 + datenum(1990,1,1,0,0,0);
-    LoggerTimeVec = datevec((Time)/24/3600 + datenum(1990,1,1,0,0,0));
+    
+    if oldLoggerTimeNum~=-9999 && abs(LoggerTimeNum-oldLoggerTimeNum) > 3
+        LoggerTimeNum = -9999; %oldLoggerTimeNum;
+    elseif abs(LoggerTimeNum-now)> dtmax
+        LoggerTimeNum = -9999;
+    end
+    
+    %LoggerTimeVec = datevec((Time)/24/3600 + datenum(1990,1,1,0,0,0));
+    LoggerTimeVec = datevec(LoggerTimeNum);
     Year = LoggerTimeVec(1);
     Month = LoggerTimeVec(2);
     Day = LoggerTimeVec(3);
@@ -166,12 +196,19 @@ for j= 1:1:Repeat
         Min = double(fread(TempFileID, 1, '*int8'));
         Sec = double(fread(TempFileID, 1, '*int8'));
         
-        Microcats(i).Timestamp{j,1} = datenum(Year, Month, Day, Hour, Min, Sec);
+        mctimenum = datenum(Year, Month, Day, Hour, Min, Sec);
+         if ~isfinite(mctimenum) || abs(datenum(2016,1, 1)-mctimenum)> dtmax
+            mctimenum = -9999;
+         end
+        
+        Microcats(i).Timestamp{j,1} = mctimenum;
         % assume that we are reading data from previous day if MC timestamp
         % is younger than logger timestamp (not necessairily true for large
         % clock drift)
         
-        if Microcats(i).Timestamp{j,1} > LoggerTimeNum, Microcats(i).Timestamp{j,1} = Microcats(i).Timestamp{j,1}-1; end
+        if Microcats(i).Timestamp{j,1} > LoggerTimeNum
+            Microcats(i).Timestamp{j,1} = Microcats(i).Timestamp{j,1}-1;
+        end
         Microcats(i).Conductivity(j, 1) = double(swapbytes(fread(TempFileID, 1, '*int32')))/100000;
         Microcats(i).Temperature(j, 1) = -1 * double(swapbytes(fread(TempFileID, 1, '*int16')))/10000;
         Microcats(i).Pressure(j, 1) = double(swapbytes(fread(TempFileID, 1, '*int32')))/1000;
@@ -193,8 +230,13 @@ for j= 1:1:Repeat
             Hour = str2num(char(dec2hex(fread(TempFileID, 1, '*int8'))));
             Min = str2num(char(dec2hex(fread(TempFileID, 1, '*int8'))));
             Sec = str2num(char(dec2hex(fread(TempFileID, 1, '*int8'))));
-        end
         
+        if Hour>24 || Hour < 0
+            Hour=[];
+            Min =[];
+            Sec=[];
+        end
+        end
         
         clear adtimedum
         Min(isempty(Min))=0;
@@ -203,20 +245,20 @@ for j= 1:1:Repeat
         adtimedum = datenum(Year, Month, Day, Hour, Min, Sec);
         adtimedum(isempty(adtimedum)) = -9999;
         
-        if ~isfinite(adtimedum) || abs(datenum(2016,1, 1)-adtimedum)> 4000
+        if ~isfinite(adtimedum) || abs(datenum(2016,1, 1)-adtimedum)> dtmax
             adtimedum = -9999;
         end
         
-        if adtimedum > LoggerTimeNum;
-            adtimedum = adtimedum-1;
-        end
+       % if j > 1 && adtimedum < Aquadopps(i).Timestamp{j-1,1} && adtimedum > Aquadopps(i).Timestamp{j-1,1}-1
+       %     adtimedum = adtimedum+1;
+       % end
         
         Aquadopps(i).Timestamp{j,1} = adtimedum;
         Aquadopps(i).U(j, 1) = double(fread(TempFileID, 1, '*int16', 0, 'l'))/1000; % eastward, m/s
         Aquadopps(i).V(j, 1) = double(fread(TempFileID, 1, '*int16', 0, 'l'))/1000;
         Aquadopps(i).W(j, 1) = double(fread(TempFileID, 1, '*int16', 0, 'l'))/1000;
         
-        if add_dummybytes==1
+        if msg_type==1
         Aquadopps(i).P(j, 1) = double(int16(65536*fread(TempFileID, 1, '*int8')) + (fread(TempFileID, 1, '*int16', 0, 'l')))/1000; % dBar
         Aquadopps(i).T(j, 1) = double(fread(TempFileID, 1, '*int16', 0, 'l'))/100; % degC
         Aquadopps(i).Head(j, 1) = double(fread(TempFileID, 1, '*int16', 0, 'l'))/10; %deg
@@ -338,6 +380,8 @@ end
 %Close files and delete temp file.
 fclose('all');
 delete([workpath '\tempbinarray.bin']);
+
+% save([workpath 'prevday'], 'LoggerTimeNum')
 
 end
 
