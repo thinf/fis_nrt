@@ -42,6 +42,7 @@ for d = 1:3
         end
         ii = find(abs(Y-median(Y))<4*std(Y));
         plot(X(ii),Y(ii),'-','color',cmap(n,:),'linewidth',2)
+        %plot(X(ii),Y(ii),'-','color',cmap(n,:),'.')
         % tit = 'Pressure (dBar)';
         
         %     title(['AD ' num2str(n) ', color = time (days)'])

@@ -249,9 +249,9 @@ for j= 1:1:Repeat
             adtimedum = -9999;
         end
         
-        if adtimedum > LoggerTimeNum;
-            adtimedum = adtimedum-1;
-        end
+       % if j > 1 && adtimedum < Aquadopps(i).Timestamp{j-1,1} && adtimedum > Aquadopps(i).Timestamp{j-1,1}-1
+       %     adtimedum = adtimedum+1;
+       % end
         
         Aquadopps(i).Timestamp{j,1} = adtimedum;
         Aquadopps(i).U(j, 1) = double(fread(TempFileID, 1, '*int16', 0, 'l'))/1000; % eastward, m/s

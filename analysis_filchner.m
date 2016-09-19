@@ -14,7 +14,7 @@ clear all;
 % path = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\800/300234061031800_';
 paths{1} = 'C:\Dropbox\Osci\FISP\#DATA\SBD/300234061031800_';  stns{1} = 'FSW1';
 paths{2} = 'C:\Dropbox\Osci\FISP\#DATA\SBD/300234061032780_'; stns{2} = 'FSE2';
-for ipi =  2%:numel(paths)
+for ipi =  1%:numel(paths)
     clearvars('-except','paths','ipi', 'stns')
     path = paths{ipi}
     stn = stns{ipi}

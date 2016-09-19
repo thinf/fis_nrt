@@ -108,7 +108,7 @@
 % make ad num p t cv w head pitch roll amp1 amp2 amp3
 
  stns{1} = 'FSW1';
- stns{2} = 'FSE2';
+ %stns{2} = 'FSE2';
     % specify folder where temporary files will be created. Also the files
     % "blankmsg1.sbd" to "blankmsg7.sbd" MUST be stored here.
 outpath = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\processed/';

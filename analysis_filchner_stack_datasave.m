@@ -42,10 +42,11 @@
     
     %% stack Aquadopp data
     disp('stack and save Aquadopp data')
-    clear num p t cv w head pitch roll amp1 amp2 amp3
+    clear num num_logger p t cv w head pitch roll amp1 amp2 amp3
     
     for n = 1:numel(data(1).Aquadopps)
         num{n} = [];
+        num_logger{n} =[];
         p{n} = [];
         t{n} = [];
         cv{n} = [];
@@ -64,10 +65,34 @@
             %                     data(i).Aquadopps(n).Timestamp{j} = nan;
             %                 end
             %             end
-            if isempty( data(i).Aquadopps(n).Timestamp{1})
-                data(i).Aquadopps(n).Timestamp{1} =nan;
-            end
-            num_ = data(i).Aquadopps(n).Timestamp{1}+[0:2:22]'/24; %cell2mat(data(i).Aquadopps(n).Timestamp);
+            
+            %% latest version time:
+            %if isempty( data(i).Aquadopps(n).Timestamp{1})
+            %    data(i).Aquadopps(n).Timestamp{1} =nan;
+            %end
+            %num_ = data(i).Aquadopps(n).Timestamp{1}+[0:2:22]'/24; %cell2mat(data(i).Aquadopps(n).Timestamp);
+            
+            num_ = data(i).Aquadopps(n).Timestamp;
+            num_ = [num_{:}]';
+            
+            num_logger_ = data(i).Aquadopps(n).LoggerTime;
+            num_logger_ = [num_logger_{:}]';
+            
+%             %% scratch
+%             n = 2;
+%              num_ts =[]; 
+%              num_lt = [];
+%              for i = 1:numel(data);
+%                  num_ = data(i).Aquadopps(n).Timestamp;
+%                  num_ = [num_{:}]';
+%                  num_ts = [num_ts; num_];
+%                  
+%                  num_ = data(i).Aquadopps(n).LoggerTime;
+%                  num_ = [num_{:}]';
+%                  num_lt = [num_lt; num_];
+%              end
+            %%
+            
             
             p_ = data(i).Aquadopps(n).P;
             t_ = data(i).Aquadopps(n).T;
@@ -81,8 +106,28 @@
             amp3_ = data(i).Aquadopps(n).Amp3;
             
             %abs(datenum(2016,1,1)-num)<500
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & abs(cv_)<1);
+            %ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & abs(cv_)<1);
+            try
+            ii = find(isfinite((num_)) & abs(cv_)<1);
+            dni = min(diff(num_(ii)));
             
+            if ~isempty(ii) && numel(num{n})>0
+            if num_(ii)< num{n}(numel(num{n}))
+                
+                disp(n)
+                disp('found inconsistent time vector -- edges')
+            elseif dni<0
+                disp(n)
+                disp('found inconsistent time vector -- inside')
+                
+                
+            end
+            end
+             catch
+                keyboard
+            end
+           
+            num_logger{n}=[num_logger{n}; num_logger_(ii)];
             num{n}=[num{n}; num_(ii)];
             p{n}=[p{n}; p_(ii)];
             t{n}=[t{n}; t_(ii)];
@@ -104,10 +149,18 @@
         %make dum p t th c s
         %mc{n} = dum;
     end
-    cell2col(num,p,t,cv,w,head,pitch,roll,amp1,amp2,amp3);
-    col2mat(num, p,t,cv,w,head,pitch,roll,amp1,amp2,amp3);
+    cell2col(num, num_logger,p,t,cv,w,head,pitch,roll,amp1,amp2,amp3);
+    col2mat(num, num_logger,p,t,cv,w,head,pitch,roll,amp1,amp2,amp3);
+  
+    make ad num num_logger p t cv w head pitch roll amp1 amp2 amp3
     
-    make ad num p t cv w head pitch roll amp1 amp2 amp3
+%     %% stack Housekeeping data
+%     disp('stack and save Housekeeping data')
+%     clear num p t cv w head pitch roll amp1 amp2 amp3
+%     
+%     for n = 1:numel(data(1).Aquadopps)
+%     end
+    
     timestamp = now;
     make dum mc ad timestamp files path
     eval([stn '= dum;'])
