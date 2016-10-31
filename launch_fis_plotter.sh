@@ -2,7 +2,9 @@
 
 # fetch latest data from ingest server to Tore's home
 rsync -rtvu /hs/datex/ingest/mooring/fse2/ /home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/
+rsync -rtvu /hs/datex/ingest/mooring/fsw1/ /home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/
 rsync -rtvu /hs/datex/ingest/mooring/fse2/ /home/csys/thatterm/SBD/
+rsync -rtvu /hs/datex/ingest/mooring/fsw1/ /home/csys/thatterm/SBD/
 wait
 echo data copy complete
 
@@ -23,11 +25,11 @@ echo data copy complete
 #/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution_files_only/run_analysis_filchner_nrtfun_plot.sh /home/csys/thatterm/v901 /home/csys/thatterm/Dropbox/Osci/FISP/#DATA/SBD/300234061032780_ fse2 /home/csys/thatterm/fis_nrt /csys/mob1/web-daten/oceanography/
 
 # new plotting routines reading data in ingest archive
-/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution_files_only/run_analysis_filchner_nrtfun_plot.sh /home/csys/thatterm/v901 /hs/datex/ingest/mooring/fse2/300234061032780_ fse2 /home/csys/thatterm/fis_nrt /home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/
+/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution_files_only/run_analysis_filchner_nrtfun_plot.sh /home/csys/thatterm/v901 /home/csys/thatterm/SBD/300234061032780_ fse2 /home/csys/thatterm/fis_nrt /home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/
 wait
 echo plotted fse2
 
-/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution_files_only/run_analysis_filchner_nrtfun_plot.sh /home/csys/thatterm/v901 /hs/datex/ingest/mooring/fsw1/300234061031800_ fsw1 /home/csys/thatterm/fis_nrt /home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/
+/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/for_redistribution_files_only/run_analysis_filchner_nrtfun_plot.sh /home/csys/thatterm/v901 /home/csys/thatterm/SBD/300234061031800_ fsw1 /home/csys/thatterm/fis_nrt /home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/
 wait
 echo plotted fsw1
 
