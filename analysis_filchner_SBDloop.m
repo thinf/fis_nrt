@@ -8,22 +8,34 @@
         %Opens all sequential messages with the same date and puts msg no/date
         %into arrays.
         i = 1;
+        
         breakflag = false;
-        while i <= NumberOfDailyMessages
+        while i <= NumberOfDailyMessages +2
+           % disp(i)
+           
             % keyboard
             Filenames{i} = strcat(path, sprintf('%06d', (MessageNo + i-1)),filetype);
             FileIds{i} = fopen(Filenames{i}, 'r');
             
+            %disp(Filenames{i})
             if FileIds{i} ~= -1
+              %  disp('filedids exists')
                 TempMsgNo = fread(FileIds{i}, 1, '*uint8', 2);
                 TempDate{i} = datestr(floor(double((fread(FileIds{i}, 1, '*uint32'))/24/3600 + datenum(1990,1,1,0,0,0))));
                 disp(TempDate{i})
-            else break
+            else
+              %  disp('do other break')
+                
+                i = i + 1;
+                
+                
+                break
             end
             
             %First time round loop stores filename and date in relevent cells in
             %array
             if i == 1;
+              %  disp('first one')
                 MessageArray{TempMsgNo, 1, DayNo} = TempDate{i};
                 MessageArray{TempMsgNo, 2, DayNo} = Filenames{i};
                 MessageArray{TempMsgNo, 3, DayNo} = FileIds{i};
@@ -31,6 +43,7 @@
                 %Next times round loop, if date matches, stores filename and date in
                 %relevent cells in array
             elseif TempDate{i} == TempDate{i-1}
+               % disp('same day')
                 MessageArray{TempMsgNo, 1, DayNo} = TempDate{i};
                 MessageArray{TempMsgNo, 2, DayNo} = Filenames{i};
                 MessageArray{TempMsgNo, 3, DayNo} = FileIds{i};
@@ -38,15 +51,18 @@
                 %As soon as there is a message with new date, we break from this
                 %loop.
             else
+               % disp('else')
                 iMax = i;    % max value of i
                 breakflag = true;
                 break;
             end
             
             if breakflag == true
+               % disp('break')
                 break
             end
             
+           % disp('shift forward')
             iMax = i;
             i = i + 1;
             

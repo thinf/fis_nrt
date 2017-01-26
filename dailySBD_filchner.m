@@ -1,13 +1,13 @@
 function [Housekeeping, Microcats, Aquadopps]...
     = dailySBD_filchner(nMC, nAD, fids, workpath, msg_type)
-
+try
 % % add reference date for checking
 % if exist([workpath 'prevday'],'file')
 %     load([workpath 'prevday'], 'LoggerTimeNum')
 %     oldLoggerTimeNum = LoggerTimeNum;
 %     dtmax = 5;
 % else
-%     oldLoggerTimeNum = 0.5*datenum(2015,12,24)+now;
+%     oldLoggerTimeNum = 0.5*datenum(2015,12,24)+now;   
 %     dtmax = 0;
 % end
 dtmax = abs(datenum(2015,12,24)-now); % time stamp threshold
@@ -383,6 +383,10 @@ delete([workpath '\tempbinarray.bin']);
 
 % save([workpath 'prevday'], 'LoggerTimeNum')
 
+catch 
+    disp('catch after error in line 387 of dailySBD_filchner')
+    keyboard
+end
 end
 
 
