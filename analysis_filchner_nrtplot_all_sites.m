@@ -1,19 +1,54 @@
-function analysis_filchner_nrt_datawrite(msg_prefix,stn,workpath,savepath)
+% First attemtp to read and plot the FISP Iridium data
+% still heavily under construction
+% thinf, 04.02.2015, tore.hattermann@awi.de
 
-path = msg_prefix;
+clear all;
+%close all;
+
+% Change this path to the folder and filename prefix that the SBD messages
+% are stored in.
+% Please note that datalogger at FSW1 SBD messages begin with 300234061031800_
+% Please note that datalogger at FSE2 SBD messages begin with 300234061038780_
+%
+% path = 'E:\SBDs\from Gerd\300234061031800_';
+% path = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\800/300234061031800_';
+machine = 'remote';
+txtwrt = 0;
+switch machine
+    case 'local'
+        dpath = 'C:\Dropbox\Osci\FISP\#DATA\SBD/';
+        prfx = {'','','',''};
+        workpath = 'C:\THINF\#TEMP\fis_nrt_tmp';
+        savepath = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\processed/';
+        have_jlab = 1;
     
-    if strcmp(stn,'fsw1') || strcmp(stn,'fse2')
-        strtdate = datenum(2015,12,24);
-        nMC = 6; % number of Microcats
-        nAD = 4; % number of Aquadopps
+    case 'remote'
+        dpath = '/hs/datex/ingest/mooring/';
+        prfx = {'fsw1/','fse2/','fne1/','fne2/'};
+        workpath = '/home/csys/thatterm/fis_nrt/'; 
+        savepath = '/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/';
+        have_jlab = 0;
+        nrtfun = 1;
+end
 
-    elseif strcmp(stn,'fne1') || strcmp(stn,'fne2')
-        strtdate = datenum(2016,12,1);
-        nMC = 5; % number of Microcats
-        nAD = 3; % number of Aquadopps
-
-    end 
+stns = {'fsw1','fse2', 'fne1', 'fne2'};
+imeis = {'/300234061031800_','/300234061032780_','/300234061035790_','/300234061030810_'};
+nMCs = [6 6 5 5];
+nADs = [4 4 3 3];
+strtdates = [datenum(2015,12,24) datenum(2015,12,24) datenum(2016,12,1) datenum(2016,12,1)];
+   
+for ipi = 1:numel(stns)
+    clearvars('-except','dpath','ipi', 'workpath', 'savepath', ...
+        'machine', 'stns','imeis', 'nMCs', 'nADs','strtdates', 'prfx', ...
+        'have_jlab','nrtfun','txtwrt')
     
+    stn = stns{ipi}
+    path = [dpath prfx{ipi} imeis{ipi}];
+    
+    nMC = nMCs(ipi); % number of Microcats
+    nAD = nADs(ipi); % number of Aquadopps
+    
+    strtdate = strtdates(ipi);
     
     % specify folder where temporary files will be created. Also the files
     % "blankmsg1.sbd" to "blankmsg7.sbd" MUST be stored here.
@@ -92,7 +127,7 @@ path = msg_prefix;
         %[data(DayNo).Housekeeping, data(DayNo).Microcats,data(DayNo).Aquadopps]...
         %    = dailySBD_filchner(nMC, nAD, fids, outpath, add_dummybytes);
         
-       dailySBD_filchner_txtwrite
+        if txtwrt; dailySBD_filchner_txtwrite; end
         
         DayNo = DayNo + 1;
     end
@@ -104,5 +139,15 @@ path = msg_prefix;
      end
     
     %######## END OF DATAREADING SECTION, stacking and Saving ###############
-   exit
+    %%
+    if have_jlab
+        analysis_filchner_stack_datasave
+        %  save([outpath stn '_' datestr(now,'yyyy_mm')],stn)
+        analysis_filchner_stack_dataplot
+    end
+    if nrtfun
+        analysis_filchner_nrt_plot
+    end
+
 end
+if nrtfun;exit;end

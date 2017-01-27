@@ -79,9 +79,9 @@
             
             if isempty(MessageArray{j, 3, DayNo})
                 %MessageArray{j, 2, DayNo} = strcat('C:\Users\THOSTR\Documents\documents from field season 2015-16\inductive system\FSW1\Iridium Analysis\blankmsg', sprintf('%d', j), '.sbd');
-               % MessageArray{j, 2, DayNo} = strcat(workpath, 'blankmsg', sprintf('%d', j), '.sbd');
+                MessageArray{j, 2, DayNo} = strcat(workpath, 'blankmsg', sprintf('%d', j), '.sbd');
                % MessageArray{j, 2, DayNo} = strcat('./', 'blankmsg', sprintf('%d', j), '.sbd');
-                MessageArray{j, 2, DayNo} = strcat(blankmsgs, sprintf('%d', j), '.sbd'); % repalce missing message by dummy
+                % MessageArray{j, 2, DayNo} = strcat(blankmsgs, sprintf('%d', j), '.sbd'); % repalce missing message by dummy
                 MessageArray{j, 3, DayNo} = fopen(MessageArray{j, 2, DayNo}, 'r');
                 
             else
@@ -94,8 +94,16 @@
                 position = ftell(MessageArray{j, 3, DayNo});
                 
                 if position ~= 337;
-                    
+                    bm = bm+1; %broken message counter
                     fclose(MessageArray{j, 3, DayNo});
+                    %MessageArray{j, 3, DayNo} = fopen(MessageArray{j, 2, DayNo}, 'a+');
+                    copyfile(MessageArray{j, 2, DayNo},workpath)
+                    dum = MessageArray{j, 2, DayNo};
+                    disp(dum)
+                    broken_message{bm} = [workpath,'/',dum(find(dum=='/',1,'last')+1:end)];
+                    
+                    MessageArray{j, 2, DayNo} = broken_message{end};
+                    
                     MessageArray{j, 3, DayNo} = fopen(MessageArray{j, 2, DayNo}, 'a+');
                     
                     noBytes = 337 - position;

@@ -60,7 +60,7 @@ for d = 1:3
         ylabel(tit)
     end
 end
-thscr2png(['Microcat_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
+thscr2png(['Microcat_' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
 
 %% plot Microcats TS
 figure(10); clf
@@ -131,7 +131,7 @@ xlabel('Salinity')
 ylabel('Potential temperature')
 legend(pl,D,'location','northwest')
 title(stn)
-thscr2png(['TS_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
+thscr2png(['TS_' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
 
 %% plot Aquadopps
 figure(2); clf
@@ -153,7 +153,7 @@ for n = 1:4
     grid on
     box on
 end
-thscr2png(['Aquadopp_' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
+thscr2png(['Aquadopp_' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
 
 %% plot Aquadopps series
 figure(20); clf
@@ -179,5 +179,5 @@ for n = 1:4
     %     grid on
     %     box on
 end
-thscr2png(['Aquadopp_ser' stn '_' datestr(now,'yyyy_mm')],'150',outpath)
+thscr2png(['Aquadopp_ser' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
 %%

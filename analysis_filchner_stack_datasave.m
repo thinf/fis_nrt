@@ -164,6 +164,6 @@
     timestamp = now;
     make dum mc ad timestamp files path
     eval([stn '= dum;'])
-    save([outpath stn '_' datestr(now,'yyyy_mm')],stn)
+    save([savepath stn '_' datestr(now,'yyyy_mm')],stn)
 
     %######## END OF DATASAVING SECTION, make standard plots ###############
