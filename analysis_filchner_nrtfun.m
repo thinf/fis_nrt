@@ -1,4 +1,4 @@
-function analysis_filchner_nrt_datawrite(msg_prefix,stn,workpath,savepath)
+function analysis_filchner_nrtfun(msg_prefix,stn,workpath,savepath)
 
 path = msg_prefix;
     
