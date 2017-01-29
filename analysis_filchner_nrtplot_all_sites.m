@@ -12,7 +12,7 @@ clear all;
 %
 % path = 'E:\SBDs\from Gerd\300234061031800_';
 % path = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\800/300234061031800_';
-machine = 'remote';
+machine = 'local';
 txtwrt = 0;
 switch machine
     case 'local'

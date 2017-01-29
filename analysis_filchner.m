@@ -12,13 +12,13 @@ clear all;
 %
 % path = 'E:\SBDs\from Gerd\300234061031800_';
 % path = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\800/300234061031800_';
-machine = 'remote';
+machine = 'local';
 txtwrt = 0;
 switch machine
     case 'local'
         dpath = 'C:\Dropbox\Osci\FISP\#DATA\SBD/';
         prfx = {'','','',''};
-        workpath = 'C:\THINF\#TEMP\fis_nrt_tmp';
+        workpath = 'C:\THINF\#TEMP\fis_nrt_tmp/';
         savepath = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\processed/';
         have_jlab = 1;
     
@@ -37,7 +37,7 @@ nMCs = [6 6 5 5];
 nADs = [4 4 3 3];
 strtdates = [datenum(2015,12,24) datenum(2015,12,24) datenum(2016,12,1) datenum(2016,12,1)];
    
-for ipi = 3:numel(stns)
+for ipi = 1:numel(stns)
     clearvars('-except','dpath','ipi', 'workpath', 'savepath', ...
         'machine', 'stns','imeis', 'nMCs', 'nADs','strtdates', 'prfx', ...
         'have_jlab','nrtfun','txtwrt')
