@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3624055295" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtplot_all_sites" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="3002886024" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtplot_all_sites" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>analysis_filchner_nrtplot_all_sites</param.appname>
     <param.icon />
     <param.icons />
@@ -8,7 +8,7 @@
     <param.email />
     <param.company />
     <param.summary />
-    <param.description />
+    <param.description>git commit 6d784e152645b0b7e762728140ca2e29fcb64e46</param.description>
     <param.screenshot />
     <param.guid />
     <param.installpath.string>/analysis_filchner_nrtplot_all_sites/</param.installpath.string>
@@ -18,23 +18,23 @@
 
 (1) Set the environment variable XAPPLRESDIR to this value:
 
-    MCR_ROOT/v91/X11/app-defaults
+    MCR_ROOT/v901/X11/app-defaults
 
 
 (2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the concatenation of the following strings:
 
-    MCR_ROOT/v91/runtime/glnxa64:
-    MCR_ROOT/v91/bin/glnxa64:
-    MCR_ROOT/v91/sys/os/glnxa64:
-    MCR_ROOT/v91/sys/opengl/lib/glnxa64
+    MCR_ROOT/v901/runtime/glnxa64:
+    MCR_ROOT/v901/bin/glnxa64:
+    MCR_ROOT/v901/sys/os/glnxa64:
+    MCR_ROOT/v901/sys/opengl/lib/glnxa64
 
     If it is defined, set it to the concatenation of these strings:
 
     ${LD_LIBRARY_PATH}: 
-    MCR_ROOT/v91/runtime/glnxa64:
-    MCR_ROOT/v91/bin/glnxa64:
-    MCR_ROOT/v91/sys/os/glnxa64:
-    MCR_ROOT/v91/sys/opengl/lib/glnxa64</param.install.notes>
+    MCR_ROOT/v901/runtime/glnxa64:
+    MCR_ROOT/v901/bin/glnxa64:
+    MCR_ROOT/v901/sys/os/glnxa64:
+    MCR_ROOT/v901/sys/opengl/lib/glnxa64</param.install.notes>
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}/analysis_filchner_nrtplot_all_sites/for_testing</param.intermediate>
     <param.files.only>${PROJECT_ROOT}/analysis_filchner_nrtplot_all_sites/for_redistribution_files_only</param.files.only>
@@ -62,7 +62,6 @@
       <param.email />
       <param.company />
       <param.summary />
-      <param.description />
       <param.screenshot />
       <param.guid />
       <param.installpath.string />
@@ -94,7 +93,26 @@
     <fileset.resources />
     <fileset.package />
     <fileset.depfun>
-      <file>/home/csys/thatterm/Documents/MATLAB/dailySBD_filchner.m</file>
+      <file>${PROJECT_ROOT}/analysis_filchner_SBDloop.m</file>
+      <file>${PROJECT_ROOT}/analysis_filchner_nrt_plot.m</file>
+      <file>${PROJECT_ROOT}/analysis_filchner_stack_dataplot.m</file>
+      <file>${PROJECT_ROOT}/analysis_filchner_stack_datasave.m</file>
+      <file>${PROJECT_ROOT}/dailySBD_filchner.m</file>
+      <file>${PROJECT_ROOT}/dailySBD_filchner_txtwrite.m</file>
+      <file>${PROJECT_ROOT}/frac.m</file>
+      <file>${PROJECT_ROOT}/iseven.m</file>
+      <file>${PROJECT_ROOT}/to_overwrite.m</file>
+      <file>${PROJECT_ROOT}/vfilt_loc.m</file>
+      <file>/home/csys/thatterm/jLab/jcell/cell2col.m</file>
+      <file>/home/csys/thatterm/jLab/jcell/cellsize.m</file>
+      <file>/home/csys/thatterm/jLab/jcommon/allall.m</file>
+      <file>/home/csys/thatterm/jLab/jcommon/aresame.m</file>
+      <file>/home/csys/thatterm/jLab/jcommon/make.m</file>
+      <file>/home/csys/thatterm/jLab/jcommon/maxmax.m</file>
+      <file>/home/csys/thatterm/jLab/jcommon/nonnan.m</file>
+      <file>/home/csys/thatterm/jLab/jcommon/reporttest.m</file>
+      <file>/home/csys/thatterm/jLab/jvarfun/col2mat.m</file>
+      <file>/home/csys/thatterm/jLab/jvarfun/vswap.m</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}/analysis_filchner_nrtplot_all_sites/for_testing" name="analysis_filchner_nrtplot_all_sites" optional="false">/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_testing/analysis_filchner_nrtplot_all_sites</file>
@@ -104,7 +122,7 @@
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/opt/matlab2016b</root>
+      <root>/opt/matlab2016a</root>
       <toolboxes />
     </matlab>
     <platform>

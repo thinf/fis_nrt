@@ -8,7 +8,7 @@
     <param.email />
     <param.company />
     <param.summary />
-    <param.description />
+    <param.description>git commit 6d784e152645b0b7e762728140ca2e29fcb64e46</param.description>
     <param.screenshot />
     <param.guid />
     <param.installpath.string>/analysis_filchner_nrtfun/</param.installpath.string>
@@ -45,8 +45,8 @@
     <param.embed.ctf>true</param.embed.ctf>
     <param.target.type>subtarget.standalone</param.target.type>
     <param.support.packages />
-    <param.web.mcr>true</param.web.mcr>
-    <param.package.mcr>false</param.package.mcr>
+    <param.web.mcr>false</param.web.mcr>
+    <param.package.mcr>true</param.package.mcr>
     <param.no.mcr>false</param.no.mcr>
     <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
     <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
@@ -62,7 +62,6 @@
       <param.email />
       <param.company />
       <param.summary />
-      <param.description />
       <param.screenshot />
       <param.guid />
       <param.installpath.string />
@@ -78,8 +77,6 @@
       <param.embed.ctf />
       <param.target.type />
       <param.support.packages />
-      <param.web.mcr />
-      <param.package.mcr />
       <param.no.mcr />
       <param.web.mcr.name />
       <param.package.mcr.name />
@@ -97,7 +94,7 @@
     </fileset.resources>
     <fileset.package />
     <fileset.depfun>
-      <file>/home/csys/thatterm/Documents/MATLAB/dailySBD_filchner.m</file>
+      <file>${PROJECT_ROOT}/analysis_filchner_SBDloop.m</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}/analysis_filchner_nrtfun/for_testing" name="readme.txt" optional="true">/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun/for_testing/readme.txt</file>
@@ -107,7 +104,7 @@
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/opt/matlab2016b</root>
+      <root>/opt/matlab2016a</root>
       <toolboxes />
     </matlab>
     <platform>
