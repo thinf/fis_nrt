@@ -12,7 +12,7 @@ clear all;
 %
 % path = 'E:\SBDs\from Gerd\300234061031800_';
 % path = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\800/300234061031800_';
-machine = 'local';
+machine = 'remote';
 txtwrt = 0;
 switch machine
     case 'local'
@@ -26,8 +26,9 @@ switch machine
         dpath = '/hs/datex/ingest/mooring/';
         prfx = {'fsw1/','fse2/','fne1/','fne2/'};
         workpath = '/home/csys/thatterm/fis_nrt/'; 
-        savepath = '/home/csys/thatterm/fis_nrt/analysis_filchner_nrtfun_plot/';
+        savepath = '/home/csys/thatterm/Dropbox/AWIsync/SBD/';
         have_jlab = 0;
+        addpath(genpath('/home/csys/thatterm/jLab'))
         nrtfun = 1;
 end
 
