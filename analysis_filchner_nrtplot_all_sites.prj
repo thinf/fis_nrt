@@ -8,7 +8,7 @@
     <param.email />
     <param.company />
     <param.summary />
-    <param.description>git commit 6d784e152645b0b7e762728140ca2e29fcb64e46</param.description>
+    <param.description>after git commit 6d784e152645b0b7e762728140ca2e29fcb64e46</param.description>
     <param.screenshot />
     <param.guid />
     <param.installpath.string>/analysis_filchner_nrtplot_all_sites/</param.installpath.string>
@@ -134,7 +134,7 @@
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>3.13.0-105-generic</osver>
+      <osver>3.13.0-107-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>

@@ -28,7 +28,8 @@ switch machine
         workpath = '/home/csys/thatterm/fis_nrt/'; 
         savepath = '/home/csys/thatterm/Dropbox/AWIsync/SBD/';
         have_jlab = 0;
-        addpath(genpath('/home/csys/thatterm/jLab'))
+%        addpath(genpath('/home/csys/thatterm/jLab')) % not supported by
+%        compiler
         nrtfun = 1;
 end
 
