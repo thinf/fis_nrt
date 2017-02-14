@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="3002886024" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtplot_all_sites" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="586067012" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtplot_all_sites" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>analysis_filchner_nrtplot_all_sites</param.appname>
     <param.icon />
     <param.icons />
@@ -103,16 +103,6 @@
       <file>${PROJECT_ROOT}/iseven.m</file>
       <file>${PROJECT_ROOT}/to_overwrite.m</file>
       <file>${PROJECT_ROOT}/vfilt_loc.m</file>
-      <file>/home/csys/thatterm/jLab/jcell/cell2col.m</file>
-      <file>/home/csys/thatterm/jLab/jcell/cellsize.m</file>
-      <file>/home/csys/thatterm/jLab/jcommon/allall.m</file>
-      <file>/home/csys/thatterm/jLab/jcommon/aresame.m</file>
-      <file>/home/csys/thatterm/jLab/jcommon/make.m</file>
-      <file>/home/csys/thatterm/jLab/jcommon/maxmax.m</file>
-      <file>/home/csys/thatterm/jLab/jcommon/nonnan.m</file>
-      <file>/home/csys/thatterm/jLab/jcommon/reporttest.m</file>
-      <file>/home/csys/thatterm/jLab/jvarfun/col2mat.m</file>
-      <file>/home/csys/thatterm/jLab/jvarfun/vswap.m</file>
     </fileset.depfun>
     <build-deliverables>
       <file location="${PROJECT_ROOT}/analysis_filchner_nrtplot_all_sites/for_testing" name="analysis_filchner_nrtplot_all_sites" optional="false">/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_testing/analysis_filchner_nrtplot_all_sites</file>

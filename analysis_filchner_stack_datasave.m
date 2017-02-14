@@ -162,8 +162,10 @@
 %     end
     
     timestamp = now;
+    clear dum
     make dum mc ad timestamp files path
     eval([stn '= dum;'])
     save([savepath stn '_' datestr(now,'yyyy_mm')],stn)
+    save([savepath stn],stn)
 
     %######## END OF DATASAVING SECTION, make standard plots ###############

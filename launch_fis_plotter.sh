@@ -5,10 +5,10 @@ rsync -rtvu /hs/datex/ingest/mooring/fse2/ /home/csys/thatterm/Dropbox/AWIsync/S
 rsync -rtvu /hs/datex/ingest/mooring/fsw1/ /home/csys/thatterm/Dropbox/AWIsync/SBD/fsw1/
 rsync -rtvu /hs/datex/ingest/mooring/fne1/ /home/csys/thatterm/Dropbox/AWIsync/SBD/fne1/
 rsync -rtvu /hs/datex/ingest/mooring/fne2/ /home/csys/thatterm/Dropbox/AWIsync/SBD/fne2/
-rsync -rtvu /hs/datex/ingest/mooring/fse2/ /home/csys/thatterm/SBD/
-rsync -rtvu /hs/datex/ingest/mooring/fsw1/ /home/csys/thatterm/SBD/
-rsync -rtvu /hs/datex/ingest/mooring/fne1/ /home/csys/thatterm/SBD/
-rsync -rtvu /hs/datex/ingest/mooring/fne2/ /home/csys/thatterm/SBD/
+rsync -rtvu /hs/datex/ingest/mooring/fse2/ /home/csys/thatterm/SBD/fse2/
+rsync -rtvu /hs/datex/ingest/mooring/fsw1/ /home/csys/thatterm/SBD/fsw1/
+rsync -rtvu /hs/datex/ingest/mooring/fne1/ /home/csys/thatterm/SBD/fne1/
+rsync -rtvu /hs/datex/ingest/mooring/fne2/ /home/csys/thatterm/SBD/fne2/
 wait
 echo data copy complete
 
@@ -46,6 +46,9 @@ scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fse2_timeseries.png thatterm@rep3-vm
 scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fsw1_timeseries.png thatterm@rep3-vm.awi.de:/var/www/FISP/
 scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fne1_timeseries.png thatterm@rep3-vm.awi.de:/var/www/FISP/
 scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fne2_timeseries.png thatterm@rep3-vm.awi.de:/var/www/FISP/
+
+# further, none-compiled matlab tasks
+ssh -x linsrv4 "cd Dropbox/AWIsync && /opt/matlab2016a/bin/matlab -r 'mlab_job'"
 
 sleep 900
 echo waited 900 s second time for dropbox synching

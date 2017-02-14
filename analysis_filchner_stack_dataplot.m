@@ -1,5 +1,6 @@
 
 %% plot Microcats
+if ~strcmp(stn,'fne1')
 figure(1); clf
 
 cmap = jet(6);
@@ -61,14 +62,14 @@ for d = 1:3
     end
 end
 thscr2png(['Microcat_' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
-
+end
 %% plot Microcats TS
 figure(10); clf
 clear D
 cmap = jet(6);
 
 
-for n = 1:6
+for n = 1:nMC
     X = [];
     P = [];
     T = [];
@@ -112,7 +113,7 @@ for n = 1:6
     %     grid on
     
     pl(n) = plot(S,TH,'.','color',cmap(n,:));
-    sref = 34.4:0.05:34.65;
+    sref = 34.4:0.01:34.67;
     D{n} = num2str(round(median(P)));
     plot(sref,fp_t(sref,ones(size(sref))*median(P)),'-','linewidth',2,'color',0.7*[1 1 1])
     plot(sref,thgade(sref,34.49,-2.45,'temp'),'-b')
@@ -124,8 +125,10 @@ for n = 1:6
     
 end
 
-xlim([34.4671, 34.6328]);
-ylim([-2.5146,-2.2248]);
+%xlim([34.4671, 34.6328]);
+xlim([34.4671, 34.67]);
+%ylim([-2.5146,-2.2248]);
+ylim([-2.5146,-1.9]);
 denscont(0);
 xlabel('Salinity')
 ylabel('Potential temperature')
@@ -136,7 +139,7 @@ thscr2png(['TS_' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
 %% plot Aquadopps
 figure(2); clf
 cmap = jet(numel(data));
-for n = 1:4
+for n = 1:nAD
     subplot(2,2,n)
     for i = 1:numel(data)
         hold on
@@ -158,7 +161,7 @@ thscr2png(['Aquadopp_' stn '_' datestr(now,'yyyy_mm')],'150',savepath)
 %% plot Aquadopps series
 figure(20); clf
 cmap = jet(numel(data));
-for n = 1:4
+for n = 1:nAD
     subplot(4,1,n)
     for i = 1:numel(data)
         hold on
