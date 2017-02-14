@@ -1,6 +1,6 @@
 
 %% plot Microcats
-if ~strcmp(stn,'fne1')
+if ~strcmp(stn,'fne1') && ~strcmp(stn,'fne2')
 figure(1); clf
 
 cmap = jet(6);
