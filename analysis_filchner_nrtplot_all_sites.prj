@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="586067012" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtplot_all_sites" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="1354473932" file="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites.prj" location="/home/csys/thatterm/fis_nrt" name="analysis_filchner_nrtplot_all_sites" preferred-package-location="/home/csys/thatterm/fis_nrt/analysis_filchner_nrtplot_all_sites/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>analysis_filchner_nrtplot_all_sites</param.appname>
     <param.icon />
     <param.icons />
@@ -42,7 +42,6 @@
     <param.logdir>${PROJECT_ROOT}/analysis_filchner_nrtplot_all_sites</param.logdir>
     <param.enable.clean.build>false</param.enable.clean.build>
     <param.user.defined.mcr.options />
-    <param.embed.ctf>true</param.embed.ctf>
     <param.target.type>subtarget.standalone</param.target.type>
     <param.support.packages />
     <param.web.mcr>true</param.web.mcr>
@@ -74,7 +73,6 @@
       <param.logdir />
       <param.enable.clean.build />
       <param.user.defined.mcr.options />
-      <param.embed.ctf />
       <param.target.type />
       <param.support.packages />
       <param.web.mcr />
@@ -112,7 +110,7 @@
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/opt/matlab2016a</root>
+      <root>/opt/matlab2017a</root>
       <toolboxes />
     </matlab>
     <platform>
@@ -124,7 +122,7 @@
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>3.13.0-107-generic</osver>
+      <osver>3.13.0-119-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>

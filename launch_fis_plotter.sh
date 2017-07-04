@@ -49,6 +49,11 @@ scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fne2_timeseries.png thatterm@rep3-vm
 
 # further, none-compiled matlab tasks
 ssh -x linsrv4 "cd Dropbox/AWIsync && /opt/matlab2016a/bin/matlab -r 'mlab_job'"
+wait
+scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fsw1.mat thatterm@rep3-vm.awi.de:/home/thatterm/
+scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fse2.mat thatterm@rep3-vm.awi.de:/home/thatterm/
+scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fne1.mat thatterm@rep3-vm.awi.de:/home/thatterm/
+scp /home/csys/thatterm/Dropbox/AWIsync/SBD/fne2.mat thatterm@rep3-vm.awi.de:/home/thatterm/
 
 sleep 900
 echo waited 900 s second time for dropbox synching

@@ -33,7 +33,7 @@ for d = 1:3
                     tit = 'Conductivity (mS/cm)';
             end
             abs(datenum(2016,1,1)-x)<200;
-            ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<300 & isfinite(y));
+            ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<360*5.5 & isfinite(y));
             X=[X; x(ii)];
             Y=[Y; y(ii)];
             
@@ -83,7 +83,7 @@ for n = 1:nMC
         c = data(i).Microcats(n).Conductivity;
         
         abs(datenum(2016,1,1)-x)<500;
-        ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<500 & p > 0 & p < 10000);
+        ii = find(isfinite((x)) & abs(datenum(2016,1,1)-x)<360*5.5 & p > 0 & p < 10000);
         X=[X; x(ii)];
         P=[P; p(ii)];
         T=[T; t(ii)];

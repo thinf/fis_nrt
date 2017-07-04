@@ -17,7 +17,7 @@
             c_ = data(i).Microcats(n).Conductivity;
             
             %abs(datenum(2016,1,1)-num)<500
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & p_ > 0 & p_ < 10000);
+            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<360*5.5 & p_ > 0 & p_ < 10000);
             
             num{n}=[num{n}; num_(ii)];
             p{n}=[p{n}; p_(ii)];
@@ -85,7 +85,7 @@ mc.p = p;
             amp3_ = data(i).Aquadopps(n).Amp3;
             
             %abs(datenum(2016,1,1)-num)<500
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & abs(cv_)<1);
+            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<360*5.5 & abs(cv_)<1);
             
             num{n}=[num{n}; num_(ii)];
             p{n}=[p{n}; p_(ii)];
@@ -165,10 +165,12 @@ datetick('x','keeplimits')
  cb = colorbar;
  set(cb,'fontsize',16)
  ylabel(cb,'Temperature [^oC]')
+ caxis([-2.5 -1.9])
+ colormap(flipud(hsv))
 
 
 
-sp2=subplot(4,1,3:4);
+sp2=subplot(4,1,3);
 sp1pos =  get(sp1,'position');
 sp2pos =  get(sp2,'position');
 sp2pos(3) = sp1pos(3)*0.925;
@@ -187,6 +189,7 @@ sp2pos(3) = sp1pos(3)*0.925;
         ad.num{4},abs(ad.cv{4})*100,'.');
     
     hold on
+    ax=gca;ax.ColorOrderIndex=1;
     fl = 60;
     p2 = plot(ad.num{1},vfilt_loc(abs(ad.cv{1})*100,fl),...
         ad.num{2},vfilt_loc(abs(ad.cv{2})*100,fl),...
@@ -199,6 +202,7 @@ elseif strcmp(stn,'fne1') || strcmp(stn,'fne2')
         ad.num{3},abs(ad.cv{3})*100,'.');
     
     hold on
+    ax=gca;ax.ColorOrderIndex=1;
     fl = 60;
     p2 = plot(ad.num{1},vfilt_loc(abs(ad.cv{1})*100,fl),...
         ad.num{2},vfilt_loc(abs(ad.cv{2})*100,fl),...
@@ -221,8 +225,73 @@ end
     set(sp2,'xlim',get(sp1,'xlim'),'fontsize',16)
     grid on
     datetick('x','keeplimits')
+    set(sp2,'xticklabel','')
     lgd = legend(p2,adpu,'location','eastoutside');
 set(sp2,'position',sp2pos)
+
+%
+sp3=subplot(4,1,4);
+sp1pos =  get(sp1,'position');
+sp2pos =  get(sp3,'position');
+sp2pos(3) = sp1pos(3)*0.925;
+
+
+ clear adpu
+ for i = 1:numel(ad.num)
+    adpu{i} = [num2str(round(median(mc.p{adp(i)}))) ' dBar'];
+ end
+
+fl = 12*30;
+ if strcmp(stn,'fsw1') || strcmp(stn,'fse2')
+%   p1 = plot(ad.num{1},abs(ad.cv{1})*100,'.',...
+%         ad.num{2},abs(ad.cv{2})*100,'.',...
+%         ad.num{3},abs(ad.cv{3})*100,'.',...
+%         ad.num{4},abs(ad.cv{4})*100,'.');
+    p1 = plot(ad.num{1},vfilt_loc(real(ad.cv{1})*100,fl),...
+        ad.num{2},vfilt_loc(real(ad.cv{2})*100,fl),...
+        ad.num{3},vfilt_loc(real(ad.cv{3})*100,fl),...
+        ad.num{4},vfilt_loc(real(ad.cv{4})*100,fl),'linewidth',2);
+    hold on
+    ax=gca;ax.ColorOrderIndex=1;
+    
+    p2 = plot(ad.num{1},vfilt_loc(imag(ad.cv{1})*100,fl),'--',...
+        ad.num{2},vfilt_loc(imag(ad.cv{2})*100,fl),'--',...
+        ad.num{3},vfilt_loc(imag(ad.cv{3})*100,fl),'--',...
+        ad.num{4},vfilt_loc(imag(ad.cv{4})*100,fl),'--','linewidth',2);
+
+elseif strcmp(stn,'fne1') || strcmp(stn,'fne2')
+%  p1 = plot(ad.num{1},abs(ad.cv{1})*100,'.',...
+%         ad.num{2},abs(ad.cv{2})*100,'.',...
+%         ad.num{3},abs(ad.cv{3})*100,'.');
+%     
+ p1 = plot(ad.num{1},vfilt_loc(real(ad.cv{1})*100,fl),'--',...
+        ad.num{2},vfilt_loc(real(ad.cv{2})*100,fl),'--',...
+        ad.num{3},vfilt_loc(real(ad.cv{3})*100,fl),'--','linewidth',3);   
+hold on
+    p2 = plot(ad.num{1},vfilt_loc(imag(ad.cv{1})*100,fl),...
+        ad.num{2},vfilt_loc(imag(ad.cv{2})*100,fl),...
+        ad.num{3},vfilt_loc(imag(ad.cv{3})*100,fl),'linewidth',3);
+end
+% 
+%     p1 = plot(ad.num{1},abs(ad.cv{1})*100,'.',...
+%         ad.num{2},abs(ad.cv{2})*100,'.',...
+%         ad.num{3},abs(ad.cv{3})*100,'.',...
+%         ad.num{4},abs(ad.cv{4})*100,'.');
+%     
+%     hold on
+%     fl = 60;
+%     p2 = plot(ad.num{1},vfilt_loc(abs(ad.cv{1})*100,fl),...
+%         ad.num{2},vfilt_loc(abs(ad.cv{2})*100,fl),...
+%         ad.num{3},vfilt_loc(abs(ad.cv{3})*100,fl),...
+%         ad.num{4},vfilt_loc(abs(ad.cv{4})*100,fl),'linewidth',3);
+    set(gca,'ylim',[-8 8])
+    plot(get(sp1,'xlim'),[0 0],'k')
+    ylabel('Speed [cm/s]','fontsize',16)
+    set(sp3,'xlim',get(sp1,'xlim'),'fontsize',16)
+    grid on
+    datetick('x','keeplimits')
+    lgd = legend([p1(1),p2(1)],'eastward','northward','location','eastoutside');
+set(sp3,'position',sp2pos)
 %error('stop')
 %%
 oldscreenunits = get(gcf,'Units');

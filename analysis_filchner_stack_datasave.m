@@ -17,7 +17,7 @@
             c_ = data(i).Microcats(n).Conductivity;
             
             %abs(datenum(2016,1,1)-num)<500
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<500 & p_ > 0 & p_ < 10000);
+            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<360*5.5 & p_ > 0 & p_ < 10000);
             
             num{n}=[num{n}; num_(ii)];
             p{n}=[p{n}; p_(ii)];
@@ -163,7 +163,7 @@
     
     timestamp = now;
     clear dum
-    make dum mc ad timestamp files path
+    make dum mc ad timestamp files data path
     eval([stn '= dum;'])
     save([savepath stn '_' datestr(now,'yyyy_mm')],stn)
     save([savepath stn],stn)
