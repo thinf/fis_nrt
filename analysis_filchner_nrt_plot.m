@@ -154,7 +154,7 @@ for i = ni
     pu(i) = median(mc.p{ii}(ia));
 end
 sp1 = subplot(4,1,1:2);
-contourf(numu,pu,tu',24,'color','none'); shading flat;
+contourf(numu,pu,tu',[-2.5:0.025:-1.9],'color','none'); shading flat;
 hold on
 plot(numu(1),pu,'k>','linewidth',2,'markersize',10)
 plot(numu(end),pu,'k<','linewidth',2,'markersize',10)
