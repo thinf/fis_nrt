@@ -12,7 +12,7 @@ clear all;
 %
 % path = 'E:\SBDs\from Gerd\300234061031800_';
 % path = 'C:\Dropbox\Osci\FISP\#DATA\inductive system\#IRIDIUM\800/300234061031800_';
-machine = 'remote';
+machine = 'remote_hh';
 txtwrt = 0;
 nrtfun = 0;
 switch machine
@@ -32,6 +32,18 @@ switch machine
         addpath('/home/csys/thatterm/mlab_lib/jlab');
         addpath('/home/csys/thatterm/mlab_lib/thinftools');
         addpath('/home/csys/thatterm/mlab_lib/eos/matlab');
+        jlab_addpath
+        have_jlab = 1;
+        nrtfun = 1;
+    case 'remote_hh'
+        dpath = '/hs/datex/ingest/mooring/';
+        prfx = {'fsw1/','fse2/','fne1/','fne2/'};
+        workpath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/fis_nrt/'; 
+        savepath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/data/';
+        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/seawater');
+        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/jlab');
+        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/thinftools');
+        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/eos/matlab');
         jlab_addpath
         have_jlab = 1;
         nrtfun = 1;
