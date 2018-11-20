@@ -1,6 +1,7 @@
 function [Housekeeping, Microcats, Aquadopps]...
     = dailySBD_filchner(nMC, nAD, fids, workpath, msg_type)
-try
+  % thinf: switch on try again here
+  % try
 % % add reference date for checking
 % if exist([workpath 'prevday'],'file')
 %     load([workpath 'prevday'], 'LoggerTimeNum')
@@ -383,10 +384,10 @@ delete([workpath '\tempbinarray.bin']);
 
 % save([workpath 'prevday'], 'LoggerTimeNum')
 
-catch 
-    disp('catch after error in line 387 of dailySBD_filchner')
-    keyboard
-end
+%catch 
+%    disp('catch after error in line 387 of dailySBD_filchner')
+%    keyboard
+%end
 end
 
 
