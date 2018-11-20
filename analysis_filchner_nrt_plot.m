@@ -232,8 +232,8 @@ set(sp2,'position',sp2pos)
 %
 sp3=subplot(4,1,4);
 sp1pos =  get(sp1,'position');
-sp2pos =  get(sp3,'position');
-sp2pos(3) = sp1pos(3)*0.925;
+sp3pos =  get(sp3,'position');
+sp3pos(3) = sp1pos(3)*0.925;
 
 
  clear adpu
@@ -291,7 +291,7 @@ end
     grid on
     datetick('x','keeplimits')
     lgd = legend([p1(1),p2(1)],'eastward','northward','location','eastoutside');
-set(sp3,'position',sp2pos)
+set(sp3,'position',sp3pos)
 %error('stop')
 %%
 oldscreenunits = get(gcf,'Units');
