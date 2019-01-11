@@ -24,7 +24,7 @@ switch machine
         have_jlab = 1;
     
     case 'remote'
-        dpath = '/hs/datex/ingest/mooring/';
+        dpath = '/hs/datex/ingest/mooring_onisi/';
         prfx = {'fsw1/','fse2/','fne1/','fne2/'};
         workpath = '/home/csys/thatterm/fis_nrt/'; 
         savepath = '/home/csys/thatterm/Dropbox/AWIsync/SBD/';
