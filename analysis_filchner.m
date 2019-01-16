@@ -37,7 +37,7 @@ switch machine
         nrtfun = 1;
     case 'remote_hh'
         dpath = '/isibhv/platforms/mooring/';
-        prfx = {'fsw1/','fse2/','fne1/','fne2/'};
+        prfx = {'fsw1/data','fse2/data','fne1/data','fne2/data'};
         workpath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/fis_nrt/'; 
         savepath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/data/';
         addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/seawater');
