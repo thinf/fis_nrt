@@ -36,7 +36,7 @@ switch machine
         have_jlab = 1;
         nrtfun = 1;
     case 'remote_hh'
-        dpath = '/hs/datex/ingest/mooring/';
+        dpath = '/isibhv/platforms/mooring/';
         prfx = {'fsw1/','fse2/','fne1/','fne2/'};
         workpath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/fis_nrt/'; 
         savepath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/data/';
