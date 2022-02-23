@@ -38,12 +38,13 @@ switch machine
     case 'remote_hh'
         dpath = '/isibhv/platforms/mooring/';
         prfx = {'fsw1/data/','fse2/data/','fne1/data/','fne2/data/'};
-        workpath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/fis_nrt/'; 
-        savepath = '/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/data/';
-        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/seawater');
-        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/jlab');
-        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/thinftools');
-        addpath('/csys/ocean2/hhellmer/disk1/user1/work/projects/FISP/Mooring/mlab_lib/eos/matlab');
+        workpath = '/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/fis_nrt/'; 
+        savepath = '/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/data/';
+        addpath('/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/mlab_lib/seawater');
+        addpath('/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/mlab_lib/jlab');
+        addpath('/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/mlab_lib/jlab');
+        addpath('/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/mlab_lib/thinftools');
+        addpath('/isibhv/projects/oce_rio/hhellmer/disk1/user1/projects/FISP/Mooring/mlab_lib/eos/matlab');
         jlab_addpath
         have_jlab = 1;
         nrtfun = 1;
@@ -102,7 +103,7 @@ for ipi = 1:numel(stns)
     %% ######## END OF USER DEFINED SECTION ###############
    
     % analysis_filchner_SBDsetup
-     % %MaxNumberOfDays - this number should be changed to be equal to the number
+    % %MaxNumberOfDays - this number should be changed to be equal to the number
     % %of days data you want to process.  It might be worth changing it to (say)
     % %365 days now, although this will mean the script takes a long time to
     % %run.

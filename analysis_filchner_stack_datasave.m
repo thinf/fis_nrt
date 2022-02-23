@@ -17,7 +17,7 @@
             c_ = data(i).Microcats(n).Conductivity;
             
             %abs(datenum(2016,1,1)-num)<500
-            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<360*5.5 & p_ > 0 & p_ < 10000);
+            ii = find(isfinite((num_)) & abs(datenum(2016,1,1)-num_)<now-datenum(2016,1,1) & p_ > 0 & p_ < 10000);
             
             num{n}=[num{n}; num_(ii)];
             p{n}=[p{n}; p_(ii)];
